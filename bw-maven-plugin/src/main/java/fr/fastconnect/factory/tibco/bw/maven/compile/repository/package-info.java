@@ -21,5 +21,5 @@
 // Généré le : 2014.09.10 à 11:00:34 AM CEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.tibco.com/xmlns/repo/types/2002", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://www.tibco.com/xmlns/repo/types/2002", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package fr.fastconnect.factory.tibco.bw.maven.compile.repository;

@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;

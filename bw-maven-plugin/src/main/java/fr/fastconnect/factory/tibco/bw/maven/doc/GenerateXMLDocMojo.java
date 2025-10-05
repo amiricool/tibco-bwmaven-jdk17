@@ -18,9 +18,9 @@ package fr.fastconnect.factory.tibco.bw.maven.doc;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;

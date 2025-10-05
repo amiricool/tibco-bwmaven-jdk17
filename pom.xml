@@ -21,10 +21,14 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
@@ -52,6 +56,8 @@
 		<project.build.directory.src>${project.build.directory}/src</project.build.directory.src>
 		<maven.site.skip>true</maven.site.skip>
 		<maven.site.deploy.skip>true</maven.site.deploy.skip>
+        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
+        <maven.compiler.release>17</maven.compiler.release>
 	</properties>
 
 	<profiles>

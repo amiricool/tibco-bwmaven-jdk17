@@ -50,11 +50,16 @@
 			<artifactId>aether-util</artifactId>
 			<version>1.8</version>
 		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
-		</dependency>
+        <dependency>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.2</version>
+        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -152,16 +157,35 @@
 			<artifactId>maven-source-plugin</artifactId>
 			<version>2.1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>fr.fastconnect.jaxb.com.tibco.bw.schemas</groupId>
-			<artifactId>application-management</artifactId>
-			<version>5.7</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.fastconnect.jaxb.com.tibco.bw.schemas</groupId>
-			<artifactId>process-model</artifactId>
-			<version>5.9</version>
-		</dependency>
+        <dependency>
+            <groupId>fr.fastconnect.jaxb.com.tibco.bw.schemas</groupId>
+            <artifactId>application-management</artifactId>
+            <version>5.8-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.fastconnect.jaxb.com.tibco.bw.schemas</groupId>
+            <artifactId>process-model</artifactId>
+            <version>5.9</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>2.1.4</version>
+        </dependency>
 
 		<!-- to manipulate ZIP files -->
 		<dependency>
@@ -236,11 +260,21 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
-			<version>2.2.10</version>
-		</dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>4.0.2</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -311,46 +345,14 @@
 				</executions>
 			</plugin>
 
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<compilerArguments>
-						<endorseddirs>${project.build.directory}/endorsed</endorseddirs>
-					</compilerArguments>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/endorsed</outputDirectory>
-							<silent>true</silent>
-							<artifactItems>
-								<artifactItem>
-									<groupId>javax.xml.bind</groupId>
-									<artifactId>jaxb-api</artifactId>
-									<version>2.2.12</version>
-									<type>jar</type>
-								</artifactItem>
-								<artifactItem>
-									<groupId>javax.xml.ws</groupId>
-									<artifactId>jaxws-api</artifactId>
-									<version>2.2.11</version>
-									<type>jar</type>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

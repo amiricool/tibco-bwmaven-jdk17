@@ -24,7 +24,7 @@
 
 package fr.fastconnect.factory.tibco.bw.maven.compile.repository;
 
-import javax.xml.bind.annotation.XmlRegistry;
+import jakarta.xml.bind.annotation.XmlRegistry;
 
 
 /**

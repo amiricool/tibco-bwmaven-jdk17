@@ -18,7 +18,7 @@ package fr.fastconnect.factory.tibco.bw.maven.packaging;
 
 import java.util.Properties;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
