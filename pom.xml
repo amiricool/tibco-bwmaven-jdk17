@@ -52,6 +52,28 @@
 					</execution>
 				</executions>
 			</plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.9.0,)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 		</plugins>
 	</build>
 
@@ -156,10 +178,6 @@
 		<name>FastConnect SAS</name>
 		<url>http://www.fastconnect.fr</url>
 	</organization>
-
-	<prerequisites>
-		<maven>3.1</maven>
-	</prerequisites>
 
 	<scm>
 		<url>https://github.com/fastconnect/tibco-bwmaven</url>
