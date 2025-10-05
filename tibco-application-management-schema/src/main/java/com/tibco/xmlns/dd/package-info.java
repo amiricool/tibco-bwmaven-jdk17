@@ -5,11 +5,11 @@
 // Generated on: 2014.01.23 at 10:11:20 AM CET 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.tibco.com/xmlns/dd",
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://www.tibco.com/xmlns/dd",
 									 xmlns={@XmlNs(namespaceURI = "http://www.tibco.com/xmlns/ApplicationManagement", prefix = ""),
 											@XmlNs(namespaceURI = "http://www.tibco.com/xmlns/dd", prefix = "dd"),
 											@XmlNs(namespaceURI = "http://www.tibco.com/xmlns/ApplicationManagement/BW", prefix = "bw"),
 											@XmlNs(namespaceURI = "http://www.tibco.com/xmlns/authentication", prefix = "auth")},
-									 elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+									 elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package com.tibco.xmlns.dd;
-import javax.xml.bind.annotation.XmlNs;
+import jakarta.xml.bind.annotation.XmlNs;
