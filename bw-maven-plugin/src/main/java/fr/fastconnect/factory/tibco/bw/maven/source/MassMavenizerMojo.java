@@ -191,8 +191,9 @@ public class MassMavenizerMojo extends ExistingBWProjectsListMojo {
 				configuration.put("archetypeRepository", archetypeRepository);
 			}
 
-			configuration.put("goals", archetypeGoals);
-			configuration.put("interactiveMode", false);
+            configuration.put("goals", archetypeGoals);
+            configuration.put("interactiveMode", Boolean.FALSE.toString());
+            configuration.put("batchMode", Boolean.TRUE.toString());
 
 			archetypeProperties = initProperties(p);
 			
@@ -207,8 +208,8 @@ public class MassMavenizerMojo extends ExistingBWProjectsListMojo {
 	                plugin(
 	                    groupId("org.apache.maven.plugins"),
 	                    artifactId("maven-archetype-plugin"),
-	                    version("2.2")
-	                ),
+                            version("3.2.1")
+                    ),
 	                goal("generate"),
 	                configuration(
 	                	generateConfiguration(configuration).toArray(new Element[0])

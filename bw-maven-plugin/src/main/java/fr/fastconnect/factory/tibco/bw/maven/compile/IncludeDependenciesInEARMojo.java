@@ -32,13 +32,16 @@ import org.codehaus.mojo.truezip.Fileset;
 import org.codehaus.mojo.truezip.TrueZipFileSet;
 import org.codehaus.mojo.truezip.internal.DefaultTrueZip;
 import org.jaxen.JaxenException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
@@ -156,10 +159,12 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
 		SAXBuilder sxb = new SAXBuilder();
 		Document document = sxb.build(xmlTIBCOFile);
 
-		XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[starts-with(dd:name, 'tibco.alias') and dd:value='" + includeOrigin + "']/dd:value");
-		xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
+        Namespace ddNamespace = Namespace.getNamespace("dd", "http://www.tibco.com/xmlns/dd");
+        XPathExpression<Element> expression = XPathFactory.instance().compile(
+                "//dd:NameValuePairs/dd:NameValuePair[starts-with(dd:name, 'tibco.alias') and dd:value='" + includeOrigin + "']/dd:value",
+                Filters.element(), null, ddNamespace);
 
-		Element singleNode = (Element) xpa.selectSingleNode(document);
+        Element singleNode = expression.evaluateFirst(document);
 		if (singleNode != null) {
 			singleNode.setText(includeDestination);
 			XMLOutputter xmlOutput = new XMLOutputter();
@@ -190,10 +195,12 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
 			SAXBuilder sxb = new SAXBuilder();
 			Document document = sxb.build(xmlTIBCOFile);
 
-			XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[dd:name='EXTERNAL_JAR_DEPENDENCY']/dd:value");
-			xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
+            Namespace ddNamespace = Namespace.getNamespace("dd", "http://www.tibco.com/xmlns/dd");
+            XPathExpression<Element> expression = XPathFactory.instance().compile(
+                    "//dd:NameValuePairs/dd:NameValuePair[dd:name='EXTERNAL_JAR_DEPENDENCY']/dd:value",
+                    Filters.element(), null, ddNamespace);
 
-			Element singleNode = (Element) xpa.selectSingleNode(document);
+            Element singleNode = expression.evaluateFirst(document);
 			if (singleNode != null) {
 				String value = singleNode.getText().replace(includeOrigin, includeDestination);
 				singleNode.setText(value);
