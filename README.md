@@ -7,8 +7,8 @@ management for TIBCO BusinessWorks 5.x projects.
 Requirements
 -------------
 1. Available Internet connection
-2. Installed Oracle JDK 6 or higher
-3. Installed maven 3 or higher
+2. Installed Oracle JDK 17 or higher
+3. Installed maven 3.9 or higher
 
 Copyright and license
 ----------------------

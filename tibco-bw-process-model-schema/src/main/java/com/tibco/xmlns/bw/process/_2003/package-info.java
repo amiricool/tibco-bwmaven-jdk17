@@ -5,5 +5,5 @@
 // Generated on: 2014.06.03 at 10:20:18 AM CEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://xmlns.tibco.com/bw/process/2003", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://xmlns.tibco.com/bw/process/2003", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package com.tibco.xmlns.bw.process._2003;

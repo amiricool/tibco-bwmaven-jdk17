@@ -5,5 +5,5 @@
 // Generated on: 2014.06.02 at 04:25:47 PM CEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://schemas.xmlsoap.org/wsdl/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://schemas.xmlsoap.org/wsdl/", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.xmlsoap.schemas.wsdl;
