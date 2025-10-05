@@ -12,8 +12,8 @@
 		<!-- We use MOXy to have proper namespace prefixes handling -->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>org.eclipse.persistence.moxy</artifactId>
-            <version>2.7.16</version>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <version>4.0.8</version>
 		</dependency>
 
 
@@ -21,18 +21,6 @@
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
             <version>4.0.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>4.0.6</version>
         </dependency>
 	</dependencies>
 
