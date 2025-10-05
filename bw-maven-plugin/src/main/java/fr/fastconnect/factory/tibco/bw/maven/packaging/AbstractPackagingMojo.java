@@ -220,7 +220,7 @@ public abstract class AbstractPackagingMojo extends AbstractBWArtifactMojo {
 				r.setFiltering(true);
 				resources.add(r);
 				
-				ArrayList<Object> filters = new ArrayList<Object>();
+				ArrayList<String> filters = new ArrayList<String>();
 				List<String> nonFilteredFileExtensions = new ArrayList<String>();
 				
 				MavenResourcesExecution mre = new MavenResourcesExecution(resources, tmpDir, this.getProject(), this.sourceEncoding, filters, nonFilteredFileExtensions, session);
