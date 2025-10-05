@@ -327,24 +327,26 @@
 						<goals>
 							<goal>xjc</goal>
 						</goals>
-						<configuration>
-							<schemaDirectory>${project.basedir}/src/main/resources/alias</schemaDirectory>
-							<schemaFiles>alias.xsd</schemaFiles>
-							<packageName>fr.fastconnect.factory.tibco.bw.maven.source.alias.jaxb</packageName>
-							<clearOutputDir>false</clearOutputDir>
-						</configuration>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/main/resources/alias/alias.xsd</source>
+                            </sources>
+                            <packageName>fr.fastconnect.factory.tibco.bw.maven.source.alias.jaxb</packageName>
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
 					</execution>
 					<execution>
 						<id>xjc-doc</id>
 						<goals>
 							<goal>xjc</goal>
 						</goals>
-						<configuration>
-							<schemaDirectory>${project.basedir}/src/main/resources/doc</schemaDirectory>
-							<schemaFiles>bw-doc.xsd</schemaFiles>
-							<packageName>fr.fastconnect.factory.tibco.bw.maven.doc.jaxb</packageName>
-							<clearOutputDir>false</clearOutputDir>
-						</configuration>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/main/resources/doc/bw-doc.xsd</source>
+                            </sources>
+                            <packageName>fr.fastconnect.factory.tibco.bw.maven.doc.jaxb</packageName>
+                            <clearOutputDir>false</clearOutputDir>
+                        </configuration>
 					</execution>
 				</executions>
 			</plugin>
