@@ -234,7 +234,7 @@
 			<configuration>
 				<groupId>org.apache.maven.plugins</groupId>
  				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+                <version>3.3.1</version>
 				<goal>copy-resources</goal>
 
 				<resources>
@@ -275,7 +275,7 @@
 			<configuration>
 				<groupId>org.apache.maven.plugins</groupId>
  				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
+                <version>3.9.0</version>
 				<goal>copy-dependencies</goal>
 
  				<configuration>
@@ -321,7 +321,7 @@
 			<configuration>
 				<groupId>org.apache.maven.plugins</groupId>
  				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
+                <version>3.9.0</version>
 				<goal>list</goal>
  				<configuration>
  					<property>
@@ -362,7 +362,7 @@
 			<configuration>
 				<groupId>org.apache.maven.plugins</groupId>
  				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+                <version>3.3.1</version>
 				<goal>copy-resources</goal>
 				<resources>
 					<resource>
@@ -399,7 +399,7 @@
 			<configuration>
 				<groupId>org.apache.maven.plugins</groupId>
  				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
+                <version>3.9.0</version>
 				<goal>copy-dependencies</goal>
 
  				<configuration>
@@ -448,7 +448,7 @@
 			<configuration>
 				<groupId>org.apache.maven.plugins</groupId>
  				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
+                <version>3.9.0</version>
 				<goal>list</goal>
  				<configuration>
  					<property>
@@ -489,7 +489,7 @@
 			<configuration>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-invoker-plugin</artifactId>
-				<version>1.9</version>
+                <version>3.9.1</version>
 				<goal>run</goal>
 				<configuration>
 					<property>
