@@ -21,6 +21,7 @@ import java.io.File;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
+import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -135,13 +136,18 @@ public abstract class AbstractBWArtifactMojo extends AbstractBWMojo {
 			return a;
 		}
 
-		Artifact result = new DefaultArtifact(a.getGroupId(),
-				                              a.getArtifactId(),
-				                              a.getVersionRange(),
-				                              a.getScope(),
-				                              type,
-				                              classifier,
-				                              new DefaultArtifactHandler(type));
+        VersionRange versionRange = a.getVersionRange();
+        if (versionRange == null && a.getVersion() != null) {
+            versionRange = VersionRange.createFromVersion(a.getVersion());
+        }
+
+        Artifact result = new DefaultArtifact(a.getGroupId(),
+                a.getArtifactId(),
+                versionRange,
+                a.getScope(),
+                type,
+                classifier,
+                new DefaultArtifactHandler(type));
 		
 		return result;
 	}

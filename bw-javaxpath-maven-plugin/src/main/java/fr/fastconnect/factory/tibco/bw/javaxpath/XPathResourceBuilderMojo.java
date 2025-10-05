@@ -1,5 +1,5 @@
-/**
- * (C) Copyright 2011-2015 FastConnect SAS
+/*
+ * (C) Copyright 2011-2025 FastConnect SAS
  * (http://www.fastconnect.fr/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;

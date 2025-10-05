@@ -73,12 +73,12 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-configuration2</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.ant</groupId>
@@ -104,7 +104,7 @@
 	    <dependency>
 	      <groupId>org.apache.maven</groupId>
 	      <artifactId>maven-artifact</artifactId>
-	      <version>3.1.1</version>
+          <version>${maven.api.version}</version>
 	    </dependency>
 
 		<dependency>
@@ -144,8 +144,8 @@
 			<version>1.4.01</version>
 		</dependency>
 		<dependency>
-			<groupId>xmlunit</groupId>
-			<artifactId>xmlunit</artifactId>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jdom</groupId>

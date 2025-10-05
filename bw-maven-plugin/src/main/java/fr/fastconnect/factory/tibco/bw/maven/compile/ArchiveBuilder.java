@@ -26,7 +26,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
-import org.apache.commons.collections.list.SetUniqueList;
+import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xerces.dom.CoreDocumentImpl;
 import org.apache.xerces.dom.ElementImpl;
@@ -76,7 +76,6 @@ public class ArchiveBuilder {
 		return element;
 	}
 
-	@SuppressWarnings("unchecked") // TODO: switch to Apache Commons 4.0+
 	public void removeDuplicateProcesses() {
 		ElementNSImpl mergedEnterpriseArchive = (ElementNSImpl) this.repository.getAny().get(0);
 		ElementNSImpl mergedProcessArchive = getElement(mergedEnterpriseArchive, "processArchive");
@@ -84,7 +83,7 @@ public class ArchiveBuilder {
 
 		String content = mergedProcessProperty.getTextContent();
 		if (content != null && !content.isEmpty()) {
-			List<String> processes = SetUniqueList.decorate(new ArrayList<String>());
+			List<String> processes = SetUniqueList.setUniqueList(new ArrayList<String>());
 			processes.addAll(Arrays.asList(content.split(",")));
 			String contentWithoutDuplicate = StringUtils.join(processes, ",");
 			mergedProcessProperty.setTextContent(contentWithoutDuplicate);

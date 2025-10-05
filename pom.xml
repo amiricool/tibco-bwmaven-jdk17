@@ -56,6 +56,7 @@
 		<project.build.directory.src>${project.build.directory}/src</project.build.directory.src>
 		<maven.site.skip>true</maven.site.skip>
 		<maven.site.deploy.skip>true</maven.site.deploy.skip>
+        <maven.api.version>3.9.11</maven.api.version>
         <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
         <maven.compiler.release>17</maven.compiler.release>
 	</properties>
