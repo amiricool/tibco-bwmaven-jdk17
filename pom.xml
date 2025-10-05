@@ -41,9 +41,13 @@
 							<goal>format</goal>
 						</goals>
 						<configuration>
-							<excludes>
-								<exclude>**/goal.txt</exclude>
-							</excludes>
+                            <licenseSets>
+                                <licenseSet>
+                                    <excludes>
+                                        <exclude>**/goal.txt</exclude>
+							        </excludes>
+                                </licenseSet>
+                            </licenseSets>
 						</configuration>
 					</execution>
 				</executions>
