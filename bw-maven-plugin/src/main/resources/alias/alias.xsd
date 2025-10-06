@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    (C) Copyright 2011-2015 FastConnect SAS
+    (C) Copyright 2011-2025 FastConnect SAS
     (http://www.fastconnect.fr/) and others.
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
     limitations under the License.
 
 -->
-<!-- This schema describes entries in ".aliaslib" files in TIBCO BW projects -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
      xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002"

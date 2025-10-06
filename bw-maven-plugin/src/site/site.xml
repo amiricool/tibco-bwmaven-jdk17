@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    (C) Copyright 2011-2015 FastConnect SAS
+    (C) Copyright 2011-2025 FastConnect SAS
     (http://www.fastconnect.fr/) and others.
 
     Licensed under the Apache License, Version 2.0 (the "License");

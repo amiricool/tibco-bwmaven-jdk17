@@ -1,5 +1,5 @@
-/**
- * (C) Copyright 2011-2015 FastConnect SAS
+/*
+ * (C) Copyright 2011-2025 FastConnect SAS
  * (http://www.fastconnect.fr/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,11 +46,6 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
-import de.schlichtherle.truezip.file.TArchiveDetector;
-import de.schlichtherle.truezip.file.TConfig;
-import de.schlichtherle.truezip.file.TFile;
-import de.schlichtherle.truezip.fs.archive.zip.ZipDriver;
-import de.schlichtherle.truezip.socket.sl.IOPoolLocator;
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWArtifactMojo;
 
 /**
