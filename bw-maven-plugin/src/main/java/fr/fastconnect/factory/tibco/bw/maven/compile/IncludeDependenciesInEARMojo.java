@@ -191,8 +191,8 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
                 getLog().error("Unable to resolve file 'TIBCO.xml' in ear directory '" + ear.getAbsolutePath() + "'.");
                 return;
             }
-
-            Path tempFile = Files.createTempFile("tibco", ".xml");
+            String tempPath = ear.getParentFile().getAbsolutePath() + File.separator + "TIBCO.xml";
+            Path tempFile = Path.of(tempPath);
             FileObject tempXml = null;
             try {
                 tempXml = fileSystemManager.resolveFile(tempFile.toUri().toString());
@@ -249,7 +249,8 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
                             continue;
                         }
 
-                        Path tempFile = Files.createTempFile("tibco-par", ".xml");
+                        String tempPath = ear.getParentFile().getAbsolutePath() + File.separator + "TIBCO.xml";
+                        Path tempFile = Path.of(tempPath);
                         FileObject tempXml = null;
                         try {
                             tempXml = fileSystemManager.resolveFile(tempFile.toUri().toString());

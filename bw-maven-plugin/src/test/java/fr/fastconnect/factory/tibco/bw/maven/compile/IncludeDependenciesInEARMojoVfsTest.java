@@ -55,12 +55,11 @@ public class IncludeDependenciesInEARMojoVfsTest {
     public void nestedZipMustBeAccessedThroughDedicatedFileSystem() throws Exception {
         Path tempDir = Files.createTempDirectory("ear");
         File ear = createEarWithNestedLib(tempDir);
-
+System.out.println(ear.getAbsolutePath());
         FileObject earRoot = manager.resolveFile("zip:" + ear.toURI().toString());
 
         FileObject incorrectLibDirectory = earRoot.resolveFile("zip:lib.zip!/WEB-INF/lib");
         assertFalse("VFS should not resolve nested zips via a zip: prefix relative to the parent archive", incorrectLibDirectory.exists());
-
         FileObject libZip = earRoot.resolveFile("lib.zip");
         FileObject libFileSystem = manager.createFileSystem("zip", libZip);
         FileObject libDirectory = libFileSystem.resolveFile("WEB-INF/lib");
