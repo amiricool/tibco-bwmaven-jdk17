@@ -53,7 +53,7 @@ public class IncludeDependenciesInEARMojoVfsTest {
 
     @Test
     public void nestedZipMustBeAccessedThroughDedicatedFileSystem() throws Exception {
-        Path tempDir = Files.createTempDirectory("ear");
+        Path tempDir = Path.of(".");
         File ear = createEarWithNestedLib(tempDir);
 System.out.println(ear.getAbsolutePath());
         FileObject earRoot = manager.resolveFile("zip:" + ear.toURI().toString());
