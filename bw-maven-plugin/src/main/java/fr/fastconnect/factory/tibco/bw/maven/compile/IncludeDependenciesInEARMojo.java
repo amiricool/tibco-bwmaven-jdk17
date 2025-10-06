@@ -120,7 +120,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         try {
             libDirectory = resolveLibDirectory();
             if (libDirectory == null) {
-                getLog().error("Unable to resolve libDirectory 'zip:lib.zip!/WEB-INF/lib' in ear directory '" + ear.getAbsolutePath() + "'.");
+                getLog().error("Unable to resolve libDirectory 'lib.zip!/WEB-INF/lib' in ear directory '" + ear.getAbsolutePath() + "'.");
                 return;
             }
 
@@ -148,8 +148,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
             }
 
             if (removeVersionFromFileNames) {
-                String outputDirectory = ear.getAbsolutePath() + File.separator + "lib.zip" + File.separator + "WEB-INF" + File.separator + "lib";
-                removeVersionFromFileNames(outputDirectory, ear);
+                removeVersionFromFileNames(ear);
             }
         } catch (FileSystemException e) {
             throw new IOException("Unable to copy JAR dependencies into EAR", e);
@@ -162,11 +161,11 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         if (earRoot == null) {
             return null;
         }
-        return fileSystemManager.resolveFile(earRoot, "zip:lib.zip!/WEB-INF/lib");
+        return earRoot.resolveFile("zip:lib.zip!/WEB-INF/lib");
     }
 
 
-    private void removeVersionFromFileNames(String outputDirectory, File ear) throws IOException, JDOMException {
+    private void removeVersionFromFileNames(File ear) throws IOException, JDOMException {
         for (Dependency dependency : this.getJarDependencies()) {
             Pattern p = Pattern.compile("(.*)-" + dependency.getVersion() + JAR_EXTENSION);
 
@@ -339,7 +338,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         try {
             libDirectory = resolveLibDirectory();
             if (libDirectory == null || !libDirectory.exists()) {
-                getLog().error("Unable to resolve libDirectory 'zip:lib.zip!/WEB-INF/lib' in ear directory '" + earRoot.getPublicURIString() + "'.");
+                getLog().error("Unable to resolve libDirectory 'lib.zip!/WEB-INF/lib' in ear directory '" + earRoot.getPublicURIString() + "'.");
                 return;
             }
 
@@ -361,6 +360,4 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
             closeQuietly(destination, origin, libDirectory);
         }
     }
-
-
 }
