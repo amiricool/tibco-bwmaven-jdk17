@@ -156,6 +156,12 @@
             <version>5.10-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>2.25.2</version>
+            <scope>compile</scope>
+        </dependency>
 
 
         <dependency>
@@ -277,13 +283,18 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.plugin-tools</groupId>
-                        <artifactId>maven-plugin-tools-java</artifactId>
-                        <version>3.15.1</version>
-                    </dependency>
-                </dependencies>
+                <configuration>
+                    <extractors>
+                        <extractor>java-annotations</extractor>
+                    </extractors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>descriptor</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.plexus</groupId>

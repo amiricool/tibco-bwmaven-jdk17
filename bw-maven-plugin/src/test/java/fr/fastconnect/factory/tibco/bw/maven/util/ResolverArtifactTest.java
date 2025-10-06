@@ -31,12 +31,13 @@ public class ResolverArtifactTest {
 
     @Test
     public void defaultArtifactExposesCoordinates() {
-        Artifact artifact = new DefaultArtifact("g", "a", "jar", "1.0.0");
+        Artifact artifact = new DefaultArtifact("org.apache.maven.plugins", "maven-source-plugin", "jar", "3.3.1");
 
-        assertEquals("g", artifact.getGroupId());
-        assertEquals("a", artifact.getArtifactId());
+        assertEquals("org.apache.maven.plugins", artifact.getGroupId());
+        assertEquals("maven-source-plugin", artifact.getArtifactId());
         assertEquals("jar", artifact.getExtension());
-        assertNull("Default classifier must be null", artifact.getClassifier());
-        assertEquals("1.0.0", artifact.getVersion());
+        assertEquals("", artifact.getClassifier());
+        assertEquals("3.3.1", artifact.getVersion());
+
     }
 }
