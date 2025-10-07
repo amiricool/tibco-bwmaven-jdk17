@@ -16,21 +16,30 @@
  */
 package fr.fastconnect.factory.tibco.bw.maven.compile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.codehaus.mojo.truezip.Fileset;
-import org.codehaus.mojo.truezip.TrueZipFileSet;
-import org.codehaus.mojo.truezip.internal.DefaultTrueZip;
 import org.jaxen.JaxenException;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -40,11 +49,6 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 
-import de.schlichtherle.truezip.file.TArchiveDetector;
-import de.schlichtherle.truezip.file.TConfig;
-import de.schlichtherle.truezip.file.TFile;
-import de.schlichtherle.truezip.fs.archive.zip.ZipDriver;
-import de.schlichtherle.truezip.socket.sl.IOPoolLocator;
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWArtifactMojo;
 
 /**
@@ -85,8 +89,6 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         return BWEAR_EXTENSION;
     }
 
-    private DefaultTrueZip truezip;
-
     /**
      * <p>
      * This methods copies the transitive JAR dependencies of the project inside
@@ -99,111 +101,279 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
      * @throws JDOMException
      * @throws JaxenException
      */
+    private ArchiveContents currentEarArchive;
+    private ArchiveContents currentLibArchive;
+
     private void copyRuntimeJARsInEAR(File ear) throws IOException, JDOMException {
-        Fileset fileSet = new Fileset();
-        fileSet.setDirectory(buildLibDirectory.getAbsolutePath());
+        Path earPath = ear.toPath();
+        byte[] earBytes = Files.readAllBytes(earPath);
 
-        for (Dependency dependency : this.getJarDependencies()) {
-            String jarName = getJarName(dependency, false);
+        try {
+            currentEarArchive = readZipArchive(earBytes);
 
-            fileSet.addInclude(jarName); // using jarName because files are all in buildLibDirectory
-        }
+            byte[] libZip = currentEarArchive.files.get("lib.zip");
+            if (libZip == null) {
+                throw new IOException("Unable to locate lib.zip inside EAR archive");
+            }
 
-        String ouptutDirectory = ear.getAbsolutePath() + File.separator + "lib.zip" + File.separator + "WEB-INF" + File.separator + "lib";
-        fileSet.setOutputDirectory(ouptutDirectory);
+            currentLibArchive = readZipArchive(libZip);
+            currentLibArchive.directories.add("WEB-INF/");
+            currentLibArchive.directories.add("WEB-INF/lib/");
 
-        if (fileSet.getIncludes() != null && !fileSet.getIncludes().isEmpty()) {
-            truezip.copy(fileSet);
-        }
-        truezip.sync();
+            for (Dependency dependency : this.getJarDependencies()) {
+                String jarName = getJarName(dependency, false);
+                Path source = new File(buildLibDirectory, jarName).toPath();
+                if (!Files.exists(source)) {
+                    throw new IOException("Unable to locate dependency JAR: " + source);
+                }
+                byte[] jarContent = Files.readAllBytes(source);
+                currentLibArchive.files.put("WEB-INF/lib/" + jarName, jarContent);
+            }
 
-        if (removeVersionFromFileNames) {
-            removeVersionFromFileNames(ouptutDirectory, ear);
+            if (removeVersionFromFileNames) {
+                removeVersionFromFileNames(ear);
+            }
 
-            truezip.sync();
+            currentEarArchive.files.put("lib.zip", writeZipArchive(currentLibArchive));
+
+
+
+            Files.write(earPath, writeZipArchive(currentEarArchive));
+        } catch (JaxenException e) {
+            throw new JDOMException("Failed to update EAR aliases", e);
+        } finally {
+            currentEarArchive = null;
+            currentLibArchive = null;
         }
     }
 
-    private void removeVersionFromFileNames(String ouptutDirectory, File ear) throws IOException, JDOMException {
-        for (Dependency dependency : this.getJarDependencies()) {
-            Pattern p = Pattern.compile("(.*)-" + dependency.getVersion() + JAR_EXTENSION);
+    private static final class ArchiveContents {
+        private final Map<String, byte[]> files = new LinkedHashMap<>();
+        private final Set<String> directories = new LinkedHashSet<>();
+    }
 
-            String includeOrigin = getJarName(dependency, false);
-            String includeDestination;
-
-            Matcher m = p.matcher(includeOrigin);
-            if (m.matches()) {
-                includeDestination = m.group(1)+JAR_EXTENSION;
-
-                truezip.moveFile(new TFile(ouptutDirectory + File.separator + includeOrigin), new TFile(ouptutDirectory + File.separator + includeDestination));
-
-                updateAlias(includeOrigin, includeDestination, ear);
+    private ArchiveContents readZipArchive(byte[] archiveBytes) throws IOException {
+        ArchiveContents contents = new ArchiveContents();
+        try (ZipArchiveInputStream input = new ZipArchiveInputStream(new ByteArrayInputStream(archiveBytes))) {
+            ZipArchiveEntry entry;
+            while ((entry = input.getNextZipEntry()) != null) {
+                System.out.println("Entry :"+entry.getName());
+                String name = entry.getName();
+                if (entry.isDirectory()) {
+                    contents.directories.add(ensureDirectoryName(name));
+                    continue;
+                }
+                contents.files.put(name, readEntryBytes(input));
             }
         }
-
-        truezip.sync();
+        return contents;
     }
 
-    private void updateAlias(String includeOrigin, String includeDestination, File ear) throws JDOMException, IOException, JDOMException {
-        TFile xmlTIBCO = new TFile(ear.getAbsolutePath() + File.separator + "TIBCO.xml");
-        String tempPath = ear.getParentFile().getAbsolutePath() + File.separator + "TIBCO.xml";
-        TFile xmlTIBCOTemp = new TFile(tempPath);
+    private byte[] writeZipArchive(ArchiveContents contents) throws IOException {
+        return writeZipArchive(contents.directories, contents.files);
+    }
 
-        truezip.copyFile(xmlTIBCO, xmlTIBCOTemp);
+    private void removeVersionFromFileNames(File ear) throws IOException, JDOMException, JaxenException {
+        if (currentLibArchive == null ) {
+            getLog().info("Nothing to remove in the EAR archive");
+            return;
+        }
 
-        File xmlTIBCOFile = new File(tempPath);
+        for (Dependency dependency : this.getJarDependencies()) {
+            Pattern p = Pattern.compile("(.*)-" + Pattern.quote(dependency.getVersion()) + JAR_EXTENSION);
 
-        SAXBuilder sxb = new SAXBuilder();
-        Document document = sxb.build(xmlTIBCOFile);
+            String includeOrigin = getJarName(dependency, false);
+            Matcher matcher = p.matcher(includeOrigin);
+            if (matcher.matches()) {
+                String includeDestination = matcher.group(1) + JAR_EXTENSION;
+                String originEntry = "WEB-INF/lib/" + includeOrigin;
+                String destinationEntry = "WEB-INF/lib/" + includeDestination;
+                byte[] originBytes = currentLibArchive.files.remove(originEntry);
+                if (originBytes != null) {
+                    currentLibArchive.files.put(destinationEntry, originBytes);
+                    updateAlias(includeOrigin, includeDestination, ear);
 
-        XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[starts-with(dd:name, 'tibco.alias') and dd:value='" + includeOrigin + "']/dd:value");
-        xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
+                } else {
+                    getLog().error("Unable to find jar " + includeOrigin + " in WEB-INF/lib/");
+                }
+            }
+        }
+    }
 
-        Element singleNode = (Element) xpa.selectSingleNode(document);
-        if (singleNode != null) {
-            singleNode.setText(includeDestination);
-            XMLOutputter xmlOutput = new XMLOutputter();
-            xmlOutput.setFormat(Format.getPrettyFormat().setIndent("    "));
-            xmlOutput.output(document, new FileWriter(xmlTIBCOFile));
+    private void updateAlias(String includeOrigin, String includeDestination, File ear) throws JDOMException, IOException, JaxenException {
+        if (currentEarArchive == null) {
+            return;
+        }
 
-            truezip.copyFile(xmlTIBCOTemp, xmlTIBCO);
+        byte[] tibcoXml = currentEarArchive.files.get("TIBCO.xml");
+        if (tibcoXml != null) {
+            byte[] updatedTibco = updateTibcoXml(tibcoXml, includeOrigin, includeDestination);
+            if (updatedTibco != null) {
+                currentEarArchive.files.put("TIBCO.xml", updatedTibco);
+            }
+        } else {
+            getLog().error("Unable to find TIBCO.xml in ear archive " + ear.getAbsolutePath());
         }
 
         updateAliasInPARs(includeOrigin, includeDestination, ear);
     }
 
     private void updateAliasInPARs(String includeOrigin, String includeDestination, File ear) throws IOException, JDOMException {
-        TrueZipFileSet pars = new TrueZipFileSet();
-        pars.setDirectory(ear.getAbsolutePath());
-        pars.addInclude("*.par");
-        List<TFile> parsXML = truezip.list(pars);
-        for (TFile parXML : parsXML) {
-            TFile xmlTIBCO = new TFile(parXML, "TIBCO.xml");
 
-            String tempPath = ear.getParentFile().getAbsolutePath() + File.separator + "TIBCO.xml";
-            TFile xmlTIBCOTemp = new TFile(tempPath);
-
-            truezip.copyFile(xmlTIBCO, xmlTIBCOTemp);
-
-            File xmlTIBCOFile = new File(tempPath);
-
-            SAXBuilder sxb = new SAXBuilder();
-            Document document = sxb.build(xmlTIBCOFile);
-
-            XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[dd:name='EXTERNAL_JAR_DEPENDENCY']/dd:value");
-            xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
-
-            Element singleNode = (Element) xpa.selectSingleNode(document);
-            if (singleNode != null) {
-                String value = singleNode.getText().replace(includeOrigin, includeDestination);
-                singleNode.setText(value);
-                XMLOutputter xmlOutput = new XMLOutputter();
-                xmlOutput.setFormat(Format.getPrettyFormat().setIndent("    "));
-                xmlOutput.output(document, new FileWriter(xmlTIBCOFile));
-
-                truezip.copyFile(xmlTIBCOTemp, xmlTIBCO);
+        Map<String, byte[]> updatedPars = new LinkedHashMap<>();
+        for (Map.Entry<String, byte[]> entry : currentEarArchive.files.entrySet()) {
+            if (entry.getKey().endsWith(".par")) {
+                try {
+                    byte[] updatedPar = updateParArchive(entry.getValue(), includeOrigin, includeDestination);
+                    if (updatedPar != null) {
+                        updatedPars.put(entry.getKey(), updatedPar);
+                    }
+                } catch (JaxenException e) {
+                    throw new JDOMException("Failed to update alias in PAR " + entry.getKey(), e);
+                }
             }
         }
+
+        updatedPars.forEach(currentEarArchive.files::put);
+    }
+
+    private byte[] updateTibcoXml(byte[] tibcoBytes, String includeOrigin, String includeDestination) throws JDOMException, IOException, JaxenException {
+        SAXBuilder sxb = new SAXBuilder();
+        Document document = sxb.build(new ByteArrayInputStream(tibcoBytes));
+
+        XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[starts-with(dd:name, 'tibco.alias') and dd:value='" + includeOrigin + "']/dd:value");
+        xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
+
+        Element singleNode = (Element) xpa.selectSingleNode(document);
+        if (singleNode == null) {
+            return null;
+        }
+
+        singleNode.setText(includeDestination);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        XMLOutputter xmlOutput = new XMLOutputter();
+        xmlOutput.setFormat(Format.getPrettyFormat().setIndent("    "));
+        xmlOutput.output(document, output);
+        return output.toByteArray();
+    }
+
+    private byte[] updateParArchive(byte[] parBytes, String includeOrigin, String includeDestination) throws IOException, JDOMException, JaxenException {
+        ArchiveContents contents = readZipArchive(parBytes);
+
+        byte[] tibcoXml = contents.files.get("TIBCO.xml");
+        if (tibcoXml == null) {
+            getLog().error("Unable to find TIBCO.xml in par archive");
+            return null;
+        }
+
+        byte[] updatedTibco = updateParDependency(tibcoXml, includeOrigin, includeDestination);
+        if (updatedTibco == null) {
+            return null;
+        }
+
+        contents.files.put("TIBCO.xml", updatedTibco);
+        return writeZipArchive(contents);
+    }
+
+    private byte[] updateParDependency(byte[] tibcoXml, String includeOrigin, String includeDestination) throws JDOMException, IOException, JaxenException {
+        SAXBuilder sxb = new SAXBuilder();
+        Document document = sxb.build(new ByteArrayInputStream(tibcoXml));
+
+        XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[dd:name='EXTERNAL_JAR_DEPENDENCY']/dd:value");
+        xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
+
+        Element singleNode = (Element) xpa.selectSingleNode(document);
+        if (singleNode == null) {
+            return null;
+        }
+
+        String value = singleNode.getText();
+        if (!value.contains(includeOrigin)) {
+            return null;
+        }
+
+        String updatedValue = value.replace(includeOrigin, includeDestination);
+        if (updatedValue.equals(value)) {
+            return null;
+        }
+
+        singleNode.setText(updatedValue);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        XMLOutputter xmlOutput = new XMLOutputter();
+        xmlOutput.setFormat(Format.getPrettyFormat().setIndent("    "));
+        xmlOutput.output(document, output);
+        return output.toByteArray();
+    }
+
+    private byte[] readEntryBytes(InputStream input) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] data = new byte[8192];
+        int read;
+        while ((read = input.read(data)) != -1) {
+            buffer.write(data, 0, read);
+        }
+        return buffer.toByteArray();
+    }
+
+    private String ensureDirectoryName(String name) {
+        String normalized = name.replace('\\', '/');
+        if (!normalized.endsWith("/")) {
+            normalized += "/";
+        }
+        return normalized;
+    }
+
+    private int directoryDepth(String directory) {
+        int depth = 0;
+        for (int i = 0; i < directory.length(); i++) {
+            if (directory.charAt(i) == '/') {
+                depth++;
+            }
+        }
+        return depth;
+    }
+
+    private byte[] writeZipArchive(Set<String> directories, Map<String, byte[]> files) throws IOException {
+        Set<String> allDirectories = new LinkedHashSet<>();
+        for (String directory : directories) {
+            allDirectories.add(ensureDirectoryName(directory));
+        }
+        for (String fileName : files.keySet()) {
+            int index = fileName.lastIndexOf('/');
+            while (index > 0) {
+                allDirectories.add(fileName.substring(0, index + 1));
+                index = fileName.lastIndexOf('/', index - 1);
+            }
+        }
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try (ZipArchiveOutputStream zipOutput = new ZipArchiveOutputStream(output)) {
+            List<String> orderedDirectories = new ArrayList<>(allDirectories);
+            orderedDirectories.sort((a, b) -> {
+                int depthCompare = Integer.compare(directoryDepth(a), directoryDepth(b));
+                if (depthCompare != 0) {
+                    return depthCompare;
+                }
+                return a.compareTo(b);
+            });
+
+            for (String directory : orderedDirectories) {
+                ZipArchiveEntry entry = new ZipArchiveEntry(directory);
+                zipOutput.putArchiveEntry(entry);
+                zipOutput.closeArchiveEntry();
+            }
+
+            for (Map.Entry<String, byte[]> fileEntry : files.entrySet()) {
+                ZipArchiveEntry entry = new ZipArchiveEntry(fileEntry.getKey());
+                zipOutput.putArchiveEntry(entry);
+                zipOutput.write(fileEntry.getValue());
+                zipOutput.closeArchiveEntry();
+            }
+
+            zipOutput.finish();
+        }
+
+        return output.toByteArray();
     }
 
     public void execute() throws MojoExecutionException {
@@ -222,13 +392,9 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         if (ear == null) {
             ear = getOutputFile();
         }
+        currentEarArchive = null;
+        currentLibArchive = null;
         getLog().debug("Using EAR : " + ear.getAbsolutePath());
-
-        TConfig.get().setArchiveDetector( new TArchiveDetector( TArchiveDetector.NULL, new Object[][] {
-                { "zip|kar|par|ear", new ZipDriver( IOPoolLocator.SINGLETON ) },
-        } ) );
-
-        truezip = new DefaultTrueZip();
 
         try {
             this.copyRuntimeJARsInEAR(ear);
