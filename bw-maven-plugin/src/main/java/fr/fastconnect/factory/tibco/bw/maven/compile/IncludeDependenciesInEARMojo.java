@@ -31,6 +31,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
@@ -41,13 +51,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.jaxen.JaxenException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
 
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWArtifactMojo;
 
@@ -104,6 +107,9 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
     private ArchiveContents currentEarArchive;
     private ArchiveContents currentLibArchive;
 
+    private static final Namespace DD_NAMESPACE = Namespace.getNamespace("dd", "http://www.tibco.com/xmlns/dd");
+    private static final XPathFactory XPATH_FACTORY = XPathFactory.instance();
+
     private void copyRuntimeJARsInEAR(File ear) throws IOException, JDOMException {
         Path earPath = ear.toPath();
         byte[] earBytes = Files.readAllBytes(earPath);
@@ -139,7 +145,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
 
 
             Files.write(earPath, writeZipArchive(currentEarArchive));
-        } catch (JaxenException e) {
+        } catch (Exception e) {
             throw new JDOMException("Failed to update EAR aliases", e);
         } finally {
             currentEarArchive = null;
@@ -173,7 +179,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         return writeZipArchive(contents.directories, contents.files);
     }
 
-    private void removeVersionFromFileNames(File ear) throws IOException, JDOMException, JaxenException {
+    private void removeVersionFromFileNames(File ear) throws IOException, JDOMException {
         if (currentLibArchive == null ) {
             getLog().info("Nothing to remove in the EAR archive");
             return;
@@ -200,7 +206,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         }
     }
 
-    private void updateAlias(String includeOrigin, String includeDestination, File ear) throws JDOMException, IOException, JaxenException {
+    private void updateAlias(String includeOrigin, String includeDestination, File ear) throws JDOMException, IOException {
         if (currentEarArchive == null) {
             return;
         }
@@ -228,7 +234,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
                     if (updatedPar != null) {
                         updatedPars.put(entry.getKey(), updatedPar);
                     }
-                } catch (JaxenException e) {
+                } catch (Exception e) {
                     throw new JDOMException("Failed to update alias in PAR " + entry.getKey(), e);
                 }
             }
@@ -237,14 +243,14 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         updatedPars.forEach(currentEarArchive.files::put);
     }
 
-    private byte[] updateTibcoXml(byte[] tibcoBytes, String includeOrigin, String includeDestination) throws JDOMException, IOException, JaxenException {
+    private byte[] updateTibcoXml(byte[] tibcoBytes, String includeOrigin, String includeDestination) throws JDOMException, IOException {
         SAXBuilder sxb = new SAXBuilder();
         Document document = sxb.build(new ByteArrayInputStream(tibcoBytes));
 
-        XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[starts-with(dd:name, 'tibco.alias') and dd:value='" + includeOrigin + "']/dd:value");
-        xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
+        String expression = "//dd:NameValuePairs/dd:NameValuePair[starts-with(dd:name, 'tibco.alias') and dd:value='" + includeOrigin + "']/dd:value";
+        XPathExpression<Element> xpathExpression = XPATH_FACTORY.compile(expression, Filters.element(), null, DD_NAMESPACE);
+        Element singleNode = xpathExpression.evaluateFirst(document);
 
-        Element singleNode = (Element) xpa.selectSingleNode(document);
         if (singleNode == null) {
             return null;
         }
@@ -257,7 +263,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         return output.toByteArray();
     }
 
-    private byte[] updateParArchive(byte[] parBytes, String includeOrigin, String includeDestination) throws IOException, JDOMException, JaxenException {
+    private byte[] updateParArchive(byte[] parBytes, String includeOrigin, String includeDestination) throws IOException, JDOMException {
         ArchiveContents contents = readZipArchive(parBytes);
 
         byte[] tibcoXml = contents.files.get("TIBCO.xml");
@@ -275,14 +281,12 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         return writeZipArchive(contents);
     }
 
-    private byte[] updateParDependency(byte[] tibcoXml, String includeOrigin, String includeDestination) throws JDOMException, IOException, JaxenException {
+    private byte[] updateParDependency(byte[] tibcoXml, String includeOrigin, String includeDestination) throws JDOMException, IOException {
         SAXBuilder sxb = new SAXBuilder();
         Document document = sxb.build(new ByteArrayInputStream(tibcoXml));
 
-        XPath xpa = XPath.newInstance("//dd:NameValuePairs/dd:NameValuePair[dd:name='EXTERNAL_JAR_DEPENDENCY']/dd:value");
-        xpa.addNamespace("dd", "http://www.tibco.com/xmlns/dd");
-
-        Element singleNode = (Element) xpa.selectSingleNode(document);
+        XPathExpression<Element> xpathExpression = XPATH_FACTORY.compile("//dd:NameValuePairs/dd:NameValuePair[dd:name='EXTERNAL_JAR_DEPENDENCY']/dd:value", Filters.element(), null, DD_NAMESPACE);
+        Element singleNode = xpathExpression.evaluateFirst(document);
         if (singleNode == null) {
             return null;
         }
