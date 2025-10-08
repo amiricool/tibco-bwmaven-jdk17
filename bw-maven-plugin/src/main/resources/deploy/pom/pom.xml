@@ -54,8 +54,8 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.4.1</version>
-				<executions>
+                <version>${maven.enforcer.plugin.version}</version>
+                <executions>
 					<execution>
 						<id>enforce</id>
 						<phase>validate</phase>
