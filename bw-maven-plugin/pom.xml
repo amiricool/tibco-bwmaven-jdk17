@@ -352,6 +352,11 @@
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
+                    <compilerArgs>
+                        <arg>-Xlint:deprecation</arg>
+                        <!-- optionnel pour casser sur warning -->
+                        <!-- <arg>-Werror</arg> -->
+                    </compilerArgs>
                 </configuration>
             </plugin>
 		</plugins>

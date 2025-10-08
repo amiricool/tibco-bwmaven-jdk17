@@ -29,6 +29,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1113,11 +1114,14 @@ public class AbstractBWMojo extends AbstractMojo {
 		getLog().debug("launchTIBCOBinary command line : " + cmdLine.toString());
 		getLog().debug("working dir : " + workingDir);
 		
-		DefaultExecutor executor = new DefaultExecutor();
-		executor.setWorkingDirectory(workingDir);
+		DefaultExecutor executor = DefaultExecutor.builder()
+                .setWorkingDirectory(workingDir)
+                .get();
 		
 		if (timeOut > 0) {
-			ExecuteWatchdog watchdog = new ExecuteWatchdog(timeOut * 1000);
+			ExecuteWatchdog watchdog = ExecuteWatchdog.builder()
+                    .setTimeout(Duration.ofSeconds(timeOut))
+                    .get();
 			executor.setWatchdog(watchdog);
 		}
 
