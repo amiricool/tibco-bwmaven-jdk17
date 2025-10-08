@@ -56,7 +56,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>${maven.enforcer.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -82,10 +82,7 @@
 		<project.build.directory.src>${project.build.directory}/src</project.build.directory.src>
 		<maven.site.skip>true</maven.site.skip>
 		<maven.site.deploy.skip>true</maven.site.deploy.skip>
-        <maven.api.version>3.9.11</maven.api.version>
-        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
-        <maven.compiler.release>17</maven.compiler.release>
-	</properties>
+    </properties>
 
 	<profiles>
 		<!-- to include sources attachement when deploying, use
