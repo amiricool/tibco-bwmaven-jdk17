@@ -42,7 +42,7 @@
 				<plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-archetype-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>${maven.archetype.plugin.version}</version>
 					<executions>
 						<execution>
 							<id>default-cli</id>

@@ -82,6 +82,30 @@
 		<project.build.directory.src>${project.build.directory}/src</project.build.directory.src>
 		<maven.site.skip>true</maven.site.skip>
 		<maven.site.deploy.skip>true</maven.site.deploy.skip>
+        <mojo-executor.version>2.4.1</mojo-executor.version>
+        <maven.plugin.testing.harness.version>3.3.0</maven.plugin.testing.harness.version>
+        <maven.resolver.version>2.0.11</maven.resolver.version>
+        <angus.mail.version>2.0.5</angus.mail.version>
+        <angus.activation.version>2.0.3</angus.activation.version>
+        <ant.version>1.10.15</ant.version>
+        <commons.lang3.version>3.19.0</commons.lang3.version>
+        <commons.compress.version>1.28.0</commons.compress.version>
+        <jaxen.version>2.0.0</jaxen.version>
+        <jdom.version>2.0.6.1</jdom.version>
+        <application.management.schema.version>5.8-SNAPSHOT</application.management.schema.version>
+        <process.model.schema.version>5.10-SNAPSHOT</process.model.schema.version>
+        <log4j.slf4j2.impl.version>2.25.2</log4j.slf4j2.impl.version>
+        <jaxb.core.version>4.0.6</jaxb.core.version>
+        <jakarta.activation.api.version>2.1.4</jakarta.activation.api.version>
+        <plexus.interpolation.version>1.28</plexus.interpolation.version>
+        <maven.archetype.plugin.version>3.4.1</maven.archetype.plugin.version>
+        <jaxws.rt.version>4.0.3</jaxws.rt.version>
+        <jakarta.xml.bind.api.version>4.0.4</jakarta.xml.bind.api.version>
+        <jakarta.xml.ws.api.version>4.0.2</jakarta.xml.ws.api.version>
+        <plexus.component.metadata.version>2.2.0</plexus.component.metadata.version>
+        <jaxb2.maven.plugin.version>3.3.0</jaxb2.maven.plugin.version>
+        <maven.site.plugin.version>3.12.1</maven.site.plugin.version>
+        <maven.scm.publish.plugin.version>3.3.0</maven.scm.publish.plugin.version>
     </properties>
 
 	<profiles>

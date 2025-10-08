@@ -31,36 +31,36 @@
 		<dependency>
 			<groupId>org.twdata.maven</groupId>
 			<artifactId>mojo-executor</artifactId>
-            <version>2.4.1</version>
+            <version>${mojo-executor.version}</version>
 		</dependency>
 		<!-- Mojo unit tests -->
 		<dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>3.3.0</version>
+            <version>${maven.plugin.testing.harness.version}</version>
 			<scope>test</scope>
 		</dependency>
         <dependency>
             <groupId>org.apache.maven.resolver</groupId>
             <artifactId>maven-resolver-api</artifactId>
-            <version>2.0.11</version>
+            <version>${maven.resolver.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.resolver</groupId>
             <artifactId>maven-resolver-util</artifactId>
-            <version>2.0.11</version>
+            <version>${maven.resolver.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-mail</artifactId>
-            <version>2.0.5</version>
+            <version>${angus.mail.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-activation</artifactId>
-            <version>2.0.3</version>
+            <version>${angus.activation.version}</version>
         </dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
-            <version>1.10.15</version>
+            <version>${ant.version}</version>
         </dependency>
 		<dependency>
             <groupId>org.apache.maven</groupId>
@@ -111,18 +111,18 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-            <version>3.19.0</version>
+            <version>${commons.lang3.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.28.0</version>
+            <version>${commons.compress.version}</version>
         </dependency>
 
         <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
-            <version>2.0.0</version>
+            <version>${jaxen.version}</version>
         </dependency>
 
         <dependency>
@@ -142,7 +142,7 @@
 		<dependency>
 			<groupId>org.jdom</groupId>
 			<artifactId>jdom2</artifactId>
-            <version>2.0.6.1</version>
+            <version>${jdom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -152,18 +152,18 @@
         <dependency>
             <groupId>fr.fastconnect.jaxb.com.tibco.bw.schemas</groupId>
             <artifactId>application-management</artifactId>
-            <version>5.8-SNAPSHOT</version>
+            <version>${application.management.schema.version}</version>
         </dependency>
         <dependency>
             <groupId>fr.fastconnect.jaxb.com.tibco.bw.schemas</groupId>
             <artifactId>process-model</artifactId>
-            <version>5.10-SNAPSHOT</version>
+            <version>${process.model.schema.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
-            <version>2.25.2</version>
+            <version>${log4j.slf4j2.impl.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -171,18 +171,18 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.6</version>
+            <version>${jaxb.core.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-core</artifactId>
-            <version>4.0.6</version>
+            <version>${jaxb.core.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
-            <version>2.1.4</version>
+            <version>${jakarta.activation.api.version}</version>
         </dependency>
 
 		<dependency>
@@ -199,7 +199,7 @@
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-interpolation</artifactId>
-            <version>1.28</version>
+            <version>${plexus.interpolation.version}</version>
         </dependency>
 		<dependency>
 			<groupId>org.apache.maven.enforcer</groupId>
@@ -219,7 +219,7 @@
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-archetype-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>${maven.archetype.plugin.version}</version>
 		</dependency>
 		
 		<!-- Hawk & RV : provided dependencies are injected on the fly by
@@ -248,17 +248,17 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
-            <version>4.0.3</version>
+            <version>${jaxws.rt.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.4</version>
+            <version>${jakarta.xml.bind.api.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.ws</groupId>
             <artifactId>jakarta.xml.ws-api</artifactId>
-            <version>4.0.2</version>
+            <version>${jakarta.xml.ws.api.version}</version>
         </dependency>
 	</dependencies>
 
@@ -295,7 +295,7 @@
 			<plugin>
 				<groupId>org.codehaus.plexus</groupId>
 				<artifactId>plexus-component-metadata</artifactId>
-                <version>2.2.0</version>
+                <version>${plexus.component.metadata.version}</version>
 				<executions>
 					<execution>
 						<phase>process-classes</phase>
@@ -308,12 +308,12 @@
 			<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>${jaxb2.maven.plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.glassfish.jaxb</groupId>
                         <artifactId>jaxb-xjc</artifactId>
-                        <version>4.0.6</version>
+                        <version>${jaxb.core.version}</version>
                     </dependency>
                 </dependencies>
 				<executions>
@@ -431,13 +431,13 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-site-plugin</artifactId>
-                        <version>3.12.1</version>
+                        <version>${maven.site.plugin.version}</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-scm-publish-plugin</artifactId>
-                        <version>3.3.0</version>
+                        <version>${maven.scm.publish.plugin.version}</version>
                         <configuration>
                             <scmBranch>gh-pages</scmBranch>
                             <pubScmUrl>scm:git:${repositorySiteURL}</pubScmUrl>

@@ -28,7 +28,7 @@
 			<extension>
 				<groupId>org.apache.maven.archetype</groupId>
 				<artifactId>archetype-packaging</artifactId>
-                <version>3.4.0</version>
+                <version>${maven.archetype.plugin.version}</version>
 			</extension>
 		</extensions>
 		<plugins>
