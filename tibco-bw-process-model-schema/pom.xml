@@ -7,19 +7,27 @@
 
 	<name>JAXB implementation of TIBCO BusinessWorks Process Model schema</name>
 	<description>The targetNamespace of this schema is "http://xmlns.tibco.com/bw/process/2003"</description>
-	
+
+    <properties>
+        <moxy.version>4.0.8</moxy.version>
+        <jakarta.xml.bind.api.version>4.0.4</jakarta.xml.bind.api.version>
+        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
+        <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
+        <maven.gpg.plugin.version>3.2.8</maven.gpg.plugin.version>
+    </properties>
+
 	<dependencies>
 		<!-- We use MOXy to have proper namespace prefixes handling -->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.moxy</artifactId>
-            <version>4.0.8</version>
+            <version>${moxy.version}</version>
 		</dependency>
 
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.4</version>
+            <version>${jakarta.xml.bind.api.version}</version>
         </dependency>
 
 	</dependencies>
@@ -44,7 +52,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.1</version>
+                <version>${maven.compiler.plugin.version}</version>
 				<configuration>
                     <source>17</source>
                     <target>17</target>
@@ -54,7 +62,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>${maven.resources.plugin.version}</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -87,7 +95,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.8</version>
+                        <version>${maven.gpg.plugin.version}</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
