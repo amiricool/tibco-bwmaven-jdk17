@@ -311,24 +311,9 @@
                 <version>3.3.0</version>
                 <dependencies>
                     <dependency>
-                        <groupId>jakarta.xml.bind</groupId>
-                        <artifactId>jakarta.xml.bind-api</artifactId>
-                        <version>4.0.4</version>
-                    </dependency>
-                    <dependency>
                         <groupId>org.glassfish.jaxb</groupId>
                         <artifactId>jaxb-xjc</artifactId>
                         <version>4.0.6</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.glassfish.jaxb</groupId>
-                        <artifactId>jaxb-runtime</artifactId>
-                        <version>4.0.6</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.eclipse.persistence</groupId>
-                        <artifactId>org.eclipse.persistence.moxy</artifactId>
-                        <version>4.0.8</version>
                     </dependency>
                 </dependencies>
 				<executions>
