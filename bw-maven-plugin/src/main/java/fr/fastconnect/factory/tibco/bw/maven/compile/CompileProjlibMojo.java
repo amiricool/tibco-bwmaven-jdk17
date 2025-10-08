@@ -113,6 +113,12 @@ public class CompileProjlibMojo extends AbstractBWArtifactMojo {
 			arguments.add("-v"); // validate the project
 		}
 
+        File aliasesFile = new File(directory, ALIASES_FILE);
+        if (aliasesFile.exists()) {
+            arguments.add("-a");
+            arguments.add(aliasesFile.getAbsolutePath());
+        }
+
 		getLog().info(BUILDING_PROJLIB);
 
 		ArrayList<File> tras = new ArrayList<File>();
