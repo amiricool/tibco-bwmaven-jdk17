@@ -18,12 +18,11 @@ package fr.fastconnect.factory.tibco.bw.maven;
 
 import java.io.File;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.artifact.handler.DefaultArtifactHandler;
-import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProjectHelper;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -91,7 +90,6 @@ public abstract class AbstractBWArtifactMojo extends AbstractBWMojo {
 
     /**
      * Whether to skip the package goals.
-     * 
      * NB: shall be used with 'maven.install.skip' and 'maven.deploy.skip' set
      * to true.
      */
@@ -118,46 +116,18 @@ public abstract class AbstractBWArtifactMojo extends AbstractBWMojo {
     @Parameter(property = "project.build.classifier")
     protected String classifier;
 
-    /**
-     * This returns a {@link DefaultArtifact} object with the same groupId,
-     * artifactId, version and scope as the main artifact of the project
-     * (for instance 'bw-ear' or 'projlib').
-     * 
-     * This {@link DefaultArtifact} will have its own {@link type} and
-     * {@link classifier}.
-     * 
-     * @param a
-     * @param type
-     * @param classifier
-     * @return
-     */
-	private Artifact extractArtifact(Artifact a, String type, String classifier) {
-		if (a == null) {
-			return a;
-		}
+    @Inject
+    private MavenProjectHelper projectHelper;
 
-        VersionRange versionRange = a.getVersionRange();
-        if (versionRange == null && a.getVersion() != null) {
-            versionRange = VersionRange.createFromVersion(a.getVersion());
+
+    protected void attachFile(File f, String type, String classifier) {
+        if (classifier == null) {
+            projectHelper.attachArtifact(getProject(), type, f);
+        } else {
+            projectHelper.attachArtifact(getProject(), type, classifier, f);
         }
+    }
 
-        Artifact result = new DefaultArtifact(a.getGroupId(),
-                a.getArtifactId(),
-                versionRange,
-                a.getScope(),
-                type,
-                classifier,
-                new DefaultArtifactHandler(type));
-		
-		return result;
-	}
-
-	
-	protected void attachFile(File f, String type, String classifier) {
-		Artifact artifact = extractArtifact(getProject().getArtifact(), type, classifier);
-		artifact.setFile(f);
-		getProject().addAttachedArtifact(artifact);
-	}
 
     /**
      * Retrieves the full path of the artifact that will be created.
@@ -170,7 +140,7 @@ public abstract class AbstractBWArtifactMojo extends AbstractBWMojo {
     protected File getArtifactFile(File basedir, String finalName, String classifier) {
         if (classifier == null) {
             classifier = "";
-        } else if (classifier.trim().length() > 0 && !classifier.startsWith("-")) {
+        } else if (!classifier.trim().isEmpty() && !classifier.startsWith("-")) {
             classifier = "-" + classifier;
         }
 

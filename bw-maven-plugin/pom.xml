@@ -97,6 +97,12 @@
 			<artifactId>maven-plugin-api</artifactId>
             <scope>provided</scope>
 		</dependency>
+        <dependency><!-- TODO-->
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
 			<artifactId>maven-plugin-tools-api</artifactId>
