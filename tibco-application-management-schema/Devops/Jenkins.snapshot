@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
+    stages {
+        stage('Set Build Description') {
+            steps {
+                script {
+                    def userCause = currentBuild.rawBuild?.getCause(hudson.model.Cause$UserIdCause)
+                    def triggeredBy = userCause?.userName ?: userCause?.userId
+                    if (!triggeredBy) {
+                        def causes = currentBuild.rawBuild?.getCauses()
+                        triggeredBy = causes ? causes[0]?.shortDescription : 'Unknown'
+                    }
+                    currentBuild.description = "Triggered by ${triggeredBy}"
+                }
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                dir('tibco-application-management-schema') {
+                    sh 'mvn -B -U clean verify'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'master'
+                }
+            }
+            steps {
+                dir('tibco-application-management-schema') {
+                    sh 'mvn -B -DskipTests deploy'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            junit allowEmptyResults: true, testResults: 'tibco-application-management-schema/target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: 'tibco-application-management-schema/target/*.jar', fingerprint: true, allowEmptyArchive: true
+        }
+        success {
+            echo 'Build completed successfully.'
+        }
+        failure {
+            echo 'Build failed. Please review the logs.'
+        }
+    }
+}
