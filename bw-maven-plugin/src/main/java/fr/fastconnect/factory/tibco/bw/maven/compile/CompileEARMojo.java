@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -33,6 +32,8 @@ import org.apache.maven.project.MavenProjectHelper;
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWArtifactMojo;
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWMojo;
 import fr.fastconnect.factory.tibco.bw.maven.exception.BinaryMissingException;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -91,7 +92,7 @@ public class CompileEARMojo extends AbstractBWArtifactMojo {
     @Parameter(property = "bw.clean.projlib.defaultVars")
     private boolean cleanDefaultVars;
 
-    @Component
+    @Inject
     private MavenProjectHelper projectHelper;
 
     private void checkBuildEAR() throws MojoExecutionException {

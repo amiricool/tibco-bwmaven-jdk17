@@ -26,12 +26,13 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.project.MavenProject;
 
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWMojo;
 import fr.fastconnect.factory.tibco.bw.maven.compile.ArchiveBuilder;
 import fr.fastconnect.factory.tibco.bw.maven.source.POMManager;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -137,10 +138,10 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	}
 
 	/**
-	 * The Build Plugin Manager (this one is Java5 annotation style).
+	 * The Build Plugin Manager
 	 */
-	@Component (role = BuildPluginManager.class)
-	protected BuildPluginManager pluginManager;
+    @Inject
+    protected BuildPluginManager pluginManager;
 	
 	@Override
 	protected BuildPluginManager getPluginManager() {

@@ -22,8 +22,9 @@ import java.util.Properties;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.BuildPluginManager;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.project.MavenProject;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -127,7 +128,7 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 * The Build Plugin Manager (this one is Java5 annotation style).
 	 */
-	@Component (role = BuildPluginManager.class)
+    @Inject
 	protected BuildPluginManager pluginManager;
 	
 	@Override

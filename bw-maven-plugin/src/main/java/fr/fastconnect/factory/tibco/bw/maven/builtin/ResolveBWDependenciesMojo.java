@@ -22,8 +22,9 @@ import java.util.Properties;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.BuildPluginManager;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.project.MavenProject;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -141,8 +142,8 @@ public class ResolveBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Res
 	/**
 	 * The Build Plugin Manager (this one is Java5 annotation style).
 	 */
-	@Component (role = BuildPluginManager.class)
-	protected BuildPluginManager pluginManager;
+    @Inject
+    protected BuildPluginManager pluginManager;
 	
 	@Override
 	protected BuildPluginManager getPluginManager() {

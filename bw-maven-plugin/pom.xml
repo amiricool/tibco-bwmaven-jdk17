@@ -97,7 +97,7 @@
 			<artifactId>maven-plugin-api</artifactId>
             <scope>provided</scope>
 		</dependency>
-        <dependency><!-- TODO-->
+        <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
@@ -297,19 +297,6 @@
                         </goals>
                     </execution>
                 </executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.plexus</groupId>
-				<artifactId>plexus-component-metadata</artifactId>
-                <version>${plexus.component.metadata.version}</version>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>generate-metadata</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
                 <groupId>org.codehaus.mojo</groupId>

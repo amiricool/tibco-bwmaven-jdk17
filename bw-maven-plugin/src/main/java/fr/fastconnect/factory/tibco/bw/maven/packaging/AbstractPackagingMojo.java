@@ -32,12 +32,14 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWArtifactMojo;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * <p>
@@ -183,8 +185,9 @@ public abstract class AbstractPackagingMojo extends AbstractBWArtifactMojo {
 		return properties;
 	}
 
-	@Component( role=org.apache.maven.shared.filtering.MavenResourcesFiltering.class, hint="default")
-	protected MavenResourcesFiltering mavenResourcesFiltering;
+    @Inject
+    @Named("default")
+    protected MavenResourcesFiltering mavenResourcesFiltering;
 
 	/**
 	 * <p>

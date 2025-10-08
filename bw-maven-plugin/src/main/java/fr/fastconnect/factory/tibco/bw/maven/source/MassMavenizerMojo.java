@@ -38,7 +38,6 @@ import org.apache.maven.model.Model;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -46,6 +45,8 @@ import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
 import org.twdata.maven.mojoexecutor.MojoExecutor.ExecutionEnvironment;
 
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWMojo;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -145,8 +146,8 @@ public class MassMavenizerMojo extends ExistingBWProjectsListMojo {
 	/**
 	 * The Build Plugin Manager
 	 */
-	@Component (role = BuildPluginManager.class)
-	protected BuildPluginManager pluginManager;
+    @Inject
+    protected BuildPluginManager pluginManager;
 
 	/**
 	 * 

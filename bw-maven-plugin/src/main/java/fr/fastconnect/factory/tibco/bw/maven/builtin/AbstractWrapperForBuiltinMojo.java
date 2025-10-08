@@ -39,11 +39,12 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.project.MavenProject;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
 import org.twdata.maven.mojoexecutor.MojoExecutor.ExecutionEnvironment;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -171,9 +172,9 @@ public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resou
 	protected abstract MavenSession getSession();
 
 	/**
-	 * The Build Plugin Manager (this one is Java5 annotation style).
+	 * The Build Plugin Manager
 	 */
-	@Component (role = BuildPluginManager.class)
+    @Inject
 	protected BuildPluginManager pluginManager;
 	protected abstract BuildPluginManager getPluginManager();
 

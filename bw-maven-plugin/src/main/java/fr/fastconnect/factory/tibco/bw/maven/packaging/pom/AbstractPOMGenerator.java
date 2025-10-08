@@ -30,13 +30,14 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import fr.fastconnect.factory.tibco.bw.maven.packaging.AbstractPackagingMojo;
 import fr.fastconnect.factory.tibco.bw.maven.source.POMManager;
+
+import javax.inject.Inject;
 
 /**
  * <p>
@@ -60,7 +61,7 @@ public abstract class AbstractPOMGenerator extends AbstractPackagingMojo {
 		return POM_EXTENSION;
 	}
 
-	@Component
+    @Inject
 	protected PluginDescriptor pluginDescriptor;
 
 	/**

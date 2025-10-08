@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
@@ -231,7 +232,8 @@ public abstract class AbstractServiceEngineMojo extends AbstractBWMojo {
 		// merge aliases file into the properties file of the bwengine
 		File aliasesFile = new File(directory, ALIASES_FILE);
 		if (aliasesFile.exists()) {
-			FileUtils.write(propertyFile, FileUtils.readFileToString(aliasesFile), true);
+            String aliasesContent = FileUtils.readFileToString(aliasesFile, StandardCharsets.UTF_8);
+            FileUtils.write(propertyFile, aliasesContent, StandardCharsets.UTF_8, true);
 		}
 		
 		ArrayList<String> arguments = new ArrayList<String>();

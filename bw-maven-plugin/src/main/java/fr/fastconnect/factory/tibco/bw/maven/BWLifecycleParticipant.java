@@ -33,22 +33,25 @@ import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingResult;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 /**
  *
  * @author Mathieu Debove
  *
  */
-@Component(role = AbstractMavenLifecycleParticipant.class, hint = "BWLifecycleParticipant")
+@Named("BWLifecycleParticipant")
+@Singleton
 public class BWLifecycleParticipant extends AbstractMavenLifecycleParticipant {
 
-	@Requirement
+	@Inject
 	private Logger logger;
 
-    @Requirement
+    @Inject
     protected ProjectBuilder projectBuilder;
 
 	private AbstractBWMojo propertiesManager;
@@ -116,11 +119,9 @@ public class BWLifecycleParticipant extends AbstractMavenLifecycleParticipant {
 		logger.debug("hawkVersion : " + hawkVersion);
 
 		hawkLib = tibcoHome + File.separator + "hawk" + File.separator + hawkVersion + File.separator + "lib";
-		if (hawkLib != null) {
-			result = new File(hawkLib);
-		}
+        result = new File(hawkLib);
 
-		if (result != null && result.exists() && result.isDirectory()) {
+        if (result.exists() && result.isDirectory()) {
 			return result;
 		}
 
@@ -147,11 +148,9 @@ public class BWLifecycleParticipant extends AbstractMavenLifecycleParticipant {
 		logger.debug("rvVersion : " + rvVersion);
 
 		rvLib = tibcoHome + File.separator + "tibrv" + File.separator + rvVersion + File.separator + "lib";
-		if (rvLib != null) {
-			result = new File(rvLib);
-		}
+        result = new File(rvLib);
 
-		if (result != null && result.exists() && result.isDirectory()) {
+        if (result.exists() && result.isDirectory()) {
 			return result;
 		}
 

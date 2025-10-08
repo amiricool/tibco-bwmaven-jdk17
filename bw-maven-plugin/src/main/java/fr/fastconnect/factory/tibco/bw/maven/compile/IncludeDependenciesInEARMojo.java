@@ -162,7 +162,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
         ArchiveContents contents = new ArchiveContents();
         try (ZipArchiveInputStream input = new ZipArchiveInputStream(new ByteArrayInputStream(archiveBytes))) {
             ZipArchiveEntry entry;
-            while ((entry = input.getNextZipEntry()) != null) {
+            while ((entry = input.getNextEntry()) != null) {
                 System.out.println("Entry :"+entry.getName());
                 String name = entry.getName();
                 if (entry.isDirectory()) {
