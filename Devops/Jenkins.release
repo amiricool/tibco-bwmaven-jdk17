@@ -1,0 +1,89 @@
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 60, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
+    parameters {
+        string(name: 'RELEASE_VERSION', defaultValue: '', description: 'Optional release version (e.g. 1.2.3). Leave empty to let the Maven Release Plugin decide.')
+        string(name: 'DEVELOPMENT_VERSION', defaultValue: '', description: 'Optional next development version (e.g. 1.2.4-SNAPSHOT). Leave empty to let the plugin decide.')
+    }
+
+    environment {
+        MVN_CMD = 'mvn -B'
+    }
+
+       stages {
+            stage('Set Build Description') {
+                steps {
+                    script {
+                        def userCause = currentBuild.rawBuild?.getCause(hudson.model.Cause$UserIdCause)
+                        def triggeredBy = userCause?.userName ?: userCause?.userId
+                        if (!triggeredBy) {
+                            def causes = currentBuild.rawBuild?.getCauses()
+                            triggeredBy = causes ? causes[0]?.shortDescription : 'Unknown'
+                        }
+                        currentBuild.description = "Triggered by ${triggeredBy}"
+                    }
+                }
+            }
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Project') {
+            steps {
+                sh "${env.MVN_CMD} -U clean verify"
+            }
+        }
+
+        stage('Release Prepare') {
+            steps {
+                script {
+                    def args = "${env.MVN_CMD} release:clean release:prepare"
+                    if (params.RELEASE_VERSION?.trim()) {
+                        args += " -DreleaseVersion=${params.RELEASE_VERSION.trim()}"
+                    }
+                    if (params.DEVELOPMENT_VERSION?.trim()) {
+                        args += " -DdevelopmentVersion=${params.DEVELOPMENT_VERSION.trim()}"
+                    }
+                    sh args
+                }
+            }
+        }
+
+        stage('Release Perform') {
+            steps {
+                script {
+                    def args = "${env.MVN_CMD} release:perform"
+                    if (params.RELEASE_VERSION?.trim()) {
+                        args += " -DreleaseVersion=${params.RELEASE_VERSION.trim()}"
+                    }
+                    if (params.DEVELOPMENT_VERSION?.trim()) {
+                        args += " -DdevelopmentVersion=${params.DEVELOPMENT_VERSION.trim()}"
+                    }
+                    sh args
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: '**/release.properties', allowEmptyArchive: true
+            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
+            cleanWs()
+        }
+        success {
+            echo 'Release pipeline completed successfully.'
+        }
+        failure {
+            echo 'Release pipeline failed. Please review the logs and resolve the issues.'
+        }
+    }
+}
