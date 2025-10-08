@@ -30,7 +30,7 @@
 		<groupId>${rootProjectGroupId}</groupId>
 		<artifactId>${rootProjectArtifactId}</artifactId>
 		<version>${rootProjectVersion}</version>
-		<relativePath>${rootRelativePath}</relativePath>
+<!--    <relativePath>${rootRelativePath}</relativePath> -->
 	</parent>
 	
 	<name>${bwProjectName} project</name>
