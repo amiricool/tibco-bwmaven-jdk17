@@ -103,6 +103,12 @@
             <version>1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.sisu</groupId>
+            <artifactId>org.eclipse.sisu.inject</artifactId>
+            <version>0.3.5</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
 			<artifactId>maven-plugin-tools-api</artifactId>
@@ -298,18 +304,7 @@
                     </execution>
                 </executions>
 			</plugin>
-            <plugin>
-                <groupId>org.eclipse.sisu</groupId>
-                <artifactId>sisu-maven-plugin</artifactId>
-                <version>0.3.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>index</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
 			<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
