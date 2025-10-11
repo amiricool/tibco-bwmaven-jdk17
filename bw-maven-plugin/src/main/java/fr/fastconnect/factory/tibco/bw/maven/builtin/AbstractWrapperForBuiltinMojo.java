@@ -39,6 +39,7 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
@@ -129,25 +130,29 @@ public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resou
 	/**
 	 *  @parameter property="groupId"
 	 */
-	protected String groupId;
+    @Parameter(property = "groupId")
+    protected String groupId;
 	protected abstract String getGroupId();
 
 	/**
 	 *  @parameter property="artifactId"
 	 */
-	protected String artifactId;
+    @Parameter(property = "artifactId")
+    protected String artifactId;
 	protected abstract String getArtifactId();
 
 	/**
 	 *  @parameter property="version"
 	 */
-	protected String version;
+    @Parameter(property = "version")
+    protected String version;
 	protected abstract String getVersion();
 
 	/**
 	 *  @parameter property="goal}
 	 */
-	protected String goal;
+    @Parameter(property = "goal")
+    protected String goal;
 	protected abstract String getGoal();
 
 	// Environment configuration
@@ -158,7 +163,8 @@ public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resou
 	 * @required
 	 * @readonly
 	 */
-	protected MavenProject project;
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
 	protected abstract MavenProject getProject();
 
 	/**
@@ -168,7 +174,8 @@ public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resou
 	 * @required
 	 * @readonly
 	 */
-	protected MavenSession session;
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    protected MavenSession session;
 	protected abstract MavenSession getSession();
 
 	/**
@@ -198,7 +205,8 @@ public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resou
      * -->
      * @parameter
      */
-	protected Properties configuration;
+    @Parameter
+    protected Properties configuration;
     protected abstract Properties getConfiguration();
 	
     /**
@@ -206,7 +214,8 @@ public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resou
     * 
     * @parameter
     */
-	protected Properties resources;
+    @Parameter
+    protected Properties resources;
     protected abstract List<CustomResource> getResources();
 
 	// Execution

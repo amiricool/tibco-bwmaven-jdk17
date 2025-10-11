@@ -26,6 +26,9 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import fr.fastconnect.factory.tibco.bw.maven.AbstractBWMojo;
@@ -66,12 +69,15 @@ import javax.inject.Inject;
  * @author Mathieu Debove
  * 
  */
+@Mojo(name = "copy-bw-sources", aggregator = true, requiresProject = true,
+        requiresDependencyResolution = ResolutionScope.TEST)
 public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	// Mojo configuration
 	/**
 	 *  @parameter property="groupId"
 	 */
-	protected String groupId;
+    @Parameter(property = "groupId", defaultValue = "org.apache.maven.plugins")
+    protected String groupId;
 	
 	@Override
 	protected String getGroupId() {
@@ -81,7 +87,8 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="artifactId"
 	 */
-	protected String artifactId;
+    @Parameter(property = "artifactId", defaultValue = "maven-resources-plugin")
+    protected String artifactId;
 
 	@Override
 	protected String getArtifactId() {
@@ -91,7 +98,8 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="version"
 	 */
-	protected String version;
+    @Parameter(property = "version", defaultValue = "3.3.1")
+    protected String version;
 
 	@Override
 	protected String getVersion() {
@@ -101,36 +109,48 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="goal"
 	 */
-	protected String goal;
+    @Parameter(property = "goal", defaultValue = "copy-resources")
+    protected String goal;
 	
 	@Override
 	protected String getGoal() {
 		return goal;
 	}
 
-	// Environment configuration
-	/**
-	 * The project currently being build.
-	 *
-	 * @parameter property="project"
-	 * @required
-	 * @readonly
-	 */
-	protected MavenProject project;
+    private static Properties defaultConfiguration() {
+        Properties defaults = new Properties();
+        defaults.setProperty("outputDirectory", "${project.build.directory}/src");
+        return defaults;
+    }
+
+    private static List<Resource> defaultResources() {
+        Resource resource = new Resource();
+        resource.setDirectory("${bw.project.location}");
+        resource.setFiltering(true);
+        resource.addExclude("**/*TestSuite/");
+
+        List<Resource> defaults = new ArrayList<Resource>();
+        defaults.add(resource);
+        return defaults;
+    }
+
+    // Environment configuration
+    /**
+     * The project currently being build.
+     */
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
 
 	@Override
 	protected MavenProject getProject() {
 		return project;
 	}
 
-	/**
-	 * The current Maven session.
-	 *
-	 * @parameter property="session"
-	 * @required
-	 * @readonly
-	 */
-	protected MavenSession session;
+    /**
+     * The current Maven session.
+     */
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    protected MavenSession session;
 
 	@Override
 	protected MavenSession getSession() {
@@ -189,6 +209,7 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	 * </pre>
      * @parameter
      */
+    @Parameter
     protected Properties configuration;
 
 	@Override
@@ -201,6 +222,7 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
     * 
     * @parameter
     */
+    @Parameter
     protected List<Resource> resources;
 
 //	@Component(role = PluginDescriptor.class)
@@ -212,17 +234,20 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	 * @required
 	 * @readonly
 	 */
-	private PluginDescriptor pluginDescriptor;
+    @Parameter(defaultValue = "${plugin}", readonly = true)
+    private PluginDescriptor pluginDescriptor;
 
 	/**
 	 * @parameter property="bw.container.merged.enterprise.archive.name" default-value="${project.artifactId}"
 	 */
-	private String enterpriseArchiveName;
+    @Parameter(property = "bw.container.merged.enterprise.archive.name", defaultValue = "${project.artifactId}")
+    private String enterpriseArchiveName;
 
 	/**
 	 * @parameter property="bw.container.merged.process.archive.name" default-value="${project.artifactId}"
 	 */
-	private String processArchiveName;
+    @Parameter(property = "bw.container.merged.process.archive.name", defaultValue = "${project.artifactId}")
+    private String processArchiveName;
 
 	@Override
 	protected List<Resource> getResources() {
