@@ -210,7 +210,7 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
      * @parameter
      */
     @Parameter
-    protected Properties configuration;
+    protected Properties configuration = defaultConfiguration();
 
 	@Override
 	protected Properties getConfiguration() {
@@ -223,7 +223,7 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
     * @parameter
     */
     @Parameter
-    protected List<Resource> resources;
+    protected List<Resource> resources = defaultResources();
 
 //	@Component(role = PluginDescriptor.class)
 	/**

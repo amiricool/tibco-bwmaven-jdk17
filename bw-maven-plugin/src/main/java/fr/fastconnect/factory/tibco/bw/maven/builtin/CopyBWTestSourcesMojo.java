@@ -16,12 +16,16 @@
  */
 package fr.fastconnect.factory.tibco.bw.maven.builtin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.BuildPluginManager;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import javax.inject.Inject;
@@ -57,12 +61,15 @@ import javax.inject.Inject;
  * @author Mathieu Debove
  * 
  */
+@Mojo(name = "copy-bw-test-sources", aggregator = true, requiresProject = true,
+        requiresDependencyResolution = ResolutionScope.TEST)
 public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	// Mojo configuration
 	/**
 	 *  @parameter property="groupId"
 	 */
-	protected String groupId;
+    @Parameter(property = "groupId", defaultValue = "org.apache.maven.plugins")
+    protected String groupId;
 
 	@Override
 	protected String getGroupId() {
@@ -72,7 +79,8 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 	/**
 	 *  @parameter property="artifactId"
 	 */
-	protected String artifactId;
+    @Parameter(property = "artifactId", defaultValue = "maven-resources-plugin")
+    protected String artifactId;
 
 	@Override
 	protected String getArtifactId() {
@@ -82,7 +90,8 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 	/**
 	 *  @parameter property="version"
 	 */
-	protected String version;
+    @Parameter(property = "version", defaultValue = "3.3.1")
+    protected String version;
 
 	@Override
 	protected String getVersion() {
@@ -92,7 +101,8 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 	/**
 	 *  @parameter property="goal"
 	 */
-	protected String goal;
+    @Parameter(property = "goal", defaultValue = "copy-resources")
+    protected String goal;
 
 	@Override
 	protected String getGoal() {
@@ -107,7 +117,8 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 	 * @required
 	 * @readonly
 	 */
-	protected MavenProject project;
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
 	
 	@Override
 	protected MavenProject getProject() {
@@ -121,7 +132,8 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 	 * @required
 	 * @readonly
 	 */
-	protected MavenSession session;
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    protected MavenSession session;
 	
 	@Override
 	protected MavenSession getSession() {
@@ -177,7 +189,8 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 	 * </pre>
      * @parameter
      */
-    protected Properties configuration;
+    @Parameter
+    protected Properties configuration = defaultConfiguration();
 	
     @Override
 	protected Properties getConfiguration() {
@@ -189,11 +202,28 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
     * 
     * @parameter
     */
-    protected List<Resource> resources;
+    @Parameter
+    protected List<Resource> resources = defaultResources();
 	
     @Override
 	protected List<Resource> getResources() {
 		return resources;
 	}
 
+    private static Properties defaultConfiguration() {
+        Properties defaults = new Properties();
+        defaults.setProperty("outputDirectory", "${project.build.test.directory.src}");
+        return defaults;
+    }
+
+    private static List<Resource> defaultResources() {
+        Resource resource = new Resource();
+        resource.setDirectory("${bw.project.location}");
+        resource.setFiltering(true);
+
+        List<Resource> defaults = new ArrayList<Resource>();
+        defaults.add(resource);
+        return defaults;
+
+    }
 }

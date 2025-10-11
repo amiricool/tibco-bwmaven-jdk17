@@ -23,7 +23,7 @@ import javax.inject.Singleton;
  * Sisu component that mirrors the legacy Plexus role hint defined in
  * components.xml.
  */
-@Named("default-copy-bw-sources")
+@Named("default-copy-bw-dependencies")
 @Singleton
-public class DefaultCopyBWSourcesMojo extends CopyBWSourcesMojo {
+public class DefaultCopyBWDependenciesMojo extends CopyBWDependenciesMojo {
 }

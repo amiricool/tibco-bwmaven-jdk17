@@ -22,6 +22,9 @@ import java.util.Properties;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.BuildPluginManager;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import javax.inject.Inject;
@@ -57,12 +60,15 @@ import javax.inject.Inject;
  * @author Mathieu Debove
  * 
  */
+@Mojo(name = "copy-bw-dependencies", aggregator = true, requiresProject = true,
+        requiresDependencyResolution = ResolutionScope.TEST)
 public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	// Mojo configuration
 	/**
 	 *  @parameter property="groupId"
 	 */
-	protected String groupId;
+    @Parameter(property = "groupId", defaultValue = "org.apache.maven.plugins")
+    protected String groupId;
 	
 	@Override
 	protected String getGroupId() {
@@ -72,7 +78,8 @@ public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resour
 	/**
 	 *  @parameter property="artifactId"
 	 */
-	protected String artifactId;
+    @Parameter(property = "artifactId", defaultValue = "maven-dependency-plugin")
+    protected String artifactId;
 	
 	@Override
 	protected String getArtifactId() {
@@ -81,7 +88,8 @@ public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resour
 	/**
 	 *  @parameter property="version"
 	 */
-	protected String version;
+    @Parameter(property = "version", defaultValue = "3.9.0")
+    protected String version;
 	
 	@Override
 	protected String getVersion() {
@@ -91,7 +99,8 @@ public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resour
 	/**
 	 *  @parameter property="goal"
 	 */
-	protected String goal;
+    @Parameter(property = "goal", defaultValue = "copy-dependencies")
+    protected String goal;
 	
 	@Override
 	protected String getGoal() {
@@ -106,7 +115,8 @@ public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resour
 	 * @required
 	 * @readonly
 	 */
-	protected MavenProject project;
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
 
 	@Override
 	protected MavenProject getProject() {
@@ -120,7 +130,8 @@ public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resour
 	 * @required
 	 * @readonly
 	 */
-	protected MavenSession session;
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    protected MavenSession session;
 
 	@Override
 	protected MavenSession getSession() {
@@ -182,23 +193,42 @@ public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resour
 	 * </pre>
      * @parameter
      */
+    @Parameter
     protected Properties configuration;
 
-	@Override
-	protected Properties getConfiguration() {
-		return configuration;
-	}
+    @Override
+    protected Properties getConfiguration() {
+        Properties defaults = defaultConfiguration();
+        if (configuration == null) {
+            return defaults;
+        }
+
+        Properties merged = new Properties();
+        merged.putAll(defaults);
+        merged.putAll(configuration);
+        return merged;
+    }
 
     /**
     * Optional resources parameter do define includes/excludes filesets
     * 
     * @parameter
     */
+    @Parameter
     protected List<Resource> resources;
-    
-	@Override
-	protected List<Resource> getResources() {
-		return resources;
-	}
+
+    @Override
+    protected List<Resource> getResources() {
+        return resources;
+    }
+
+    private static Properties defaultConfiguration() {
+        Properties defaults = new Properties();
+        defaults.setProperty("outputDirectory", "${project.build.directory}/lib");
+        defaults.setProperty("includeTypes", "projlib,jar");
+        defaults.setProperty("includeScope", "runtime");
+        defaults.setProperty("overWriteIfNewer", "true");
+        return defaults;
+    }
 
 }

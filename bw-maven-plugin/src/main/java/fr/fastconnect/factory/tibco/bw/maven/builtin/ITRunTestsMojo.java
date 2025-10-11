@@ -22,6 +22,9 @@ import java.util.Properties;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.BuildPluginManager;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import javax.inject.Inject;
@@ -55,12 +58,15 @@ import javax.inject.Inject;
  * @author Mathieu Debove
  * 
  */
+@Mojo(name = "it-deploy-bw", aggregator = true, requiresProject = true,
+        requiresDependencyResolution = ResolutionScope.TEST)
 public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	// Mojo configuration
 	/**
 	 *  @parameter property="groupId"
 	 */
-	protected String groupId;
+    @Parameter(property = "groupId", defaultValue = "org.apache.maven.plugins")
+    protected String groupId;
 	
 	@Override
 	protected String getGroupId() {
@@ -70,7 +76,8 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="artifactId"
 	 */
-	protected String artifactId;
+    @Parameter(property = "artifactId", defaultValue = "maven-invoker-plugin")
+    protected String artifactId;
 	
 	@Override
 	protected String getArtifactId() {
@@ -79,7 +86,8 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="version"
 	 */
-	protected String version;
+    @Parameter(property = "version", defaultValue = "3.9.1")
+    protected String version;
 	
 	@Override
 	protected String getVersion() {
@@ -89,7 +97,8 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="goal"
 	 */
-	protected String goal;
+    @Parameter(property = "goal", defaultValue = "run")
+    protected String goal;
 	
 	@Override
 	protected String getGoal() {
@@ -104,7 +113,8 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	 * @required
 	 * @readonly
 	 */
-	protected MavenProject project;
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
 
 	@Override
 	protected MavenProject getProject() {
@@ -139,7 +149,8 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 * @parameter
 	 */
-	protected boolean skipInvocation;
+    @Parameter(property = "bw.it.skip", defaultValue = "${bw.it.skip}")
+    protected boolean skipInvocation;
 
 	// Configuration
     /**
@@ -208,21 +219,38 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	 * 
 	 * @parameter
 	 */
+    @Parameter
     protected Properties configuration;
 
-	@Override
-	protected Properties getConfiguration() {
-		if (skipInvocation) {
-			configuration.put("skipInvocation", true);
-		}
-		return configuration;
-	}
+    private static Properties defaultConfiguration() {
+        Properties defaults = new Properties();
+        defaults.setProperty("cloneProjectsTo", "${bw.it.projects.run.clone}");
+        defaults.setProperty("goals", "${bw.it.projects.run.goals}");
+        defaults.setProperty("localRepositoryPath", "${bw.it.local.repository.path}");
+        defaults.setProperty("pomIncludes", "${bw.it.projects.run.pomIncludes}");
+        defaults.setProperty("profiles", "${bw.it.projects.run.profile}");
+        defaults.setProperty("projectsDirectory", "${bw.it.projects.run.directory}");
+        defaults.setProperty("properties", "${bw.it.projects.run.properties}");
+        defaults.setProperty("streamLogs", "true");
+        return defaults;
+    }
+
+    @Override
+    protected Properties getConfiguration() {
+        Properties defaults = defaultConfiguration();
+        if (configuration != null) {
+            defaults.putAll(configuration);
+        }
+        defaults.put("skipInvocation", Boolean.toString(skipInvocation));
+        return defaults;
+    }
 
     /**
     * Optional resources parameter do define includes/excludes filesets
     * 
     * @parameter
     */
+    @Parameter
     protected List<Resource> resources;
     
 	@Override
