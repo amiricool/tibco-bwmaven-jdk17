@@ -21,6 +21,7 @@
 	<components>
 
 		<!-- POM packaging (to override) -->
+<!--
 		<component>
 			<role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
 			<role-hint>pom</role-hint>
@@ -45,6 +46,7 @@
 				</lifecycles>
 			</configuration>
 		</component>
+-->
 
 		<!-- BW EAR Deploy packaging and lifecyle (for deployment on TIBCO domain) -->
 		<component>
@@ -59,7 +61,7 @@
 			</configuration>
 		</component>
 
-		<component>
+	<!--	<component>
 			<role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
 			<role-hint>bw-ear-deploy</role-hint>
 			<implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping
@@ -83,7 +85,7 @@
  					</lifecycle>
  				</lifecycles>
 			</configuration>
-		</component>
+		</component>-->
 
 		<!-- BW EAR packaging and lifecyle -->
 		<component>
@@ -97,7 +99,7 @@
 				<packaging>bw-ear</packaging>
 			</configuration>
 		</component>
-
+<!--
 		<component>
 			<role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
 			<role-hint>bw-ear</role-hint>
@@ -157,7 +159,7 @@
  					</lifecycle>
  				</lifecycles>
 			</configuration>
-		</component>
+		</component>-->
 
 		<!-- Projlib packaging and lifecyle -->
 		<component>
@@ -172,7 +174,7 @@
 			</configuration>
 		</component>
 
-		<component>
+		<!--<component>
 			<role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
 			<role-hint>projlib</role-hint>
 			<implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping
@@ -215,7 +217,7 @@
  				</lifecycles>
 			</configuration>
 		</component>
-
+-->
 		<!-- 
 		  - Configuration of preparation goals for all packaging
 		 -->

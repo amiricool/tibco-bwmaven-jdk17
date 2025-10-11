@@ -1,0 +1,8 @@
+fr.fastconnect.factory.tibco.bw.maven.BWLifecycleParticipant
+fr.fastconnect.factory.tibco.bw.maven.artifact.BWEarArtifactHandler
+fr.fastconnect.factory.tibco.bw.maven.artifact.BWEarDeployArtifactHandler
+fr.fastconnect.factory.tibco.bw.maven.artifact.ProjlibArtifactHandler
+fr.fastconnect.factory.tibco.bw.maven.lifecycle.BWEarLifecycleMapping
+fr.fastconnect.factory.tibco.bw.maven.lifecycle.BWEarDeployLifecycleMapping
+fr.fastconnect.factory.tibco.bw.maven.lifecycle.PomLifecycleMapping
+fr.fastconnect.factory.tibco.bw.maven.lifecycle.ProjlibLifecycleMapping
