@@ -90,7 +90,7 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 	/**
 	 *  @parameter property="version"
 	 */
-    @Parameter(property = "version", defaultValue = "3.3.1")
+    @Parameter(property = "version", defaultValue = "${maven.resources.source.plugin.version}")
     protected String version;
 
 	@Override
@@ -193,10 +193,18 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
     protected Properties configuration = defaultConfiguration();
 	
     @Override
-	protected Properties getConfiguration() {
-		return configuration;
-	}
-    
+    protected Properties getConfiguration() {
+        Properties defaults = defaultConfiguration();
+        if (configuration == null) {
+            return defaults;
+        }
+
+        Properties merged = new Properties();
+        merged.putAll(defaults);
+        merged.putAll(configuration);
+        return merged;
+    }
+
     /**
     * Optional resources parameter do define includes/excludes filesets
     * 

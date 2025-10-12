@@ -96,7 +96,7 @@ public class ResolveBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Res
 	/**
 	 *  @parameter property="version"
 	 */
-    @Parameter(property = "version", defaultValue = "3.9.0")
+    @Parameter(property = "version", defaultValue = "${maven.dependency.plugin.version}")
     protected String version;
 
 	@Override
@@ -211,7 +211,7 @@ public class ResolveBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Res
      * @parameter
      */
     @Parameter
-    protected Properties configuration;
+    protected Properties configuration = defaultConfiguration();
 
     @Override
     protected Properties getConfiguration() {

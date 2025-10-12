@@ -97,7 +97,7 @@ public class ResolveBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo
 	/**
 	 *  @parameter property="version"
 	 */
-    @Parameter(property = "version", defaultValue = "3.9.0")
+    @Parameter(property = "version", defaultValue = "${maven.dependency.plugin.version}")
     protected String version;
 
 	@Override
@@ -216,8 +216,15 @@ public class ResolveBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo
 
     @Override
     protected Properties getConfiguration() {
-        // TODO Auto-generated method stub
-        return configuration;
+        Properties defaults = defaultConfiguration();
+        if (configuration == null) {
+            return defaults;
+        }
+
+        Properties merged = new Properties();
+        merged.putAll(defaults);
+        merged.putAll(configuration);
+        return merged;
     }
 
     /**

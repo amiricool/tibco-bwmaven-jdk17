@@ -86,7 +86,7 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="version"
 	 */
-    @Parameter(property = "version", defaultValue = "3.9.1")
+    @Parameter(property = "version", defaultValue = "${maven.invoker.plugin.version}")
     protected String version;
 	
 	@Override
@@ -220,7 +220,7 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	 * @parameter
 	 */
     @Parameter
-    protected Properties configuration;
+    protected Properties configuration = defaultConfiguration();
 
     private static Properties defaultConfiguration() {
         Properties defaults = new Properties();
@@ -232,17 +232,21 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
         defaults.setProperty("projectsDirectory", "${bw.it.projects.run.directory}");
         defaults.setProperty("properties", "${bw.it.projects.run.properties}");
         defaults.setProperty("streamLogs", "true");
+        defaults.setProperty("skipInvocation", "${bw.it.skip}");
         return defaults;
     }
 
     @Override
     protected Properties getConfiguration() {
         Properties defaults = defaultConfiguration();
-        if (configuration != null) {
-            defaults.putAll(configuration);
+        if (configuration == null) {
+            return defaults;
         }
-        defaults.put("skipInvocation", Boolean.toString(skipInvocation));
-        return defaults;
+
+        Properties merged = new Properties();
+        merged.putAll(defaults);
+        merged.putAll(configuration);
+        return merged;
     }
 
     /**
