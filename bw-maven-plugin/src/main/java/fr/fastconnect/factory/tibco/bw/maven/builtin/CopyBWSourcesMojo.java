@@ -99,7 +99,7 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	/**
 	 *  @parameter property="version"
 	 */
-    @Parameter(property = "version", defaultValue = "${maven.resources.source.plugin.version}")
+    @Parameter(property = "version", defaultValue = "${maven.resources.plugin.version}")
     protected String version;
 
 	@Override
