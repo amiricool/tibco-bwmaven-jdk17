@@ -22,6 +22,8 @@ import javax.inject.Singleton;
 /**
  * Sisu component that mirrors the legacy Plexus role hint defined in
  * components.xml.
+ *
+ * @author Amir Marzouk
  */
 @Named("default-resolve-bw-test-dependencies")
 @Singleton

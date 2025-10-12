@@ -123,6 +123,7 @@ import javax.inject.Inject;
  * @requiresDependencyResolution test
  *
  * @author Mathieu Debove
+ * @author Amir Marzouk
  * 
  */
 public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resource> extends AbstractMojo {

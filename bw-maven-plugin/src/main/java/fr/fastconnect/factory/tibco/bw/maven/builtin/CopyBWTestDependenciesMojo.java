@@ -58,6 +58,7 @@ import javax.inject.Inject;
  * @requiresDependencyResolution test
  *
  * @author Mathieu Debove
+ * @author Amir Marzouk
  * 
  */
 @Mojo(name = "copy-bw-test-dependencies", aggregator = true, requiresProject = true,

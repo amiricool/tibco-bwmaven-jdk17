@@ -20,7 +20,10 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
-
+/*
+ * @author Amir Marzouk
+ *
+ */
 @Named("bw-ear")
 @Singleton
 public class BWEarArtifactHandler extends DefaultArtifactHandler {

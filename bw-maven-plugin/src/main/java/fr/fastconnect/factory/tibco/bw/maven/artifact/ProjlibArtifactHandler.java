@@ -21,6 +21,10 @@ import javax.inject.Singleton;
 
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 
+/*
+ * @author Amir Marzouk
+ *
+ */
 @Named("projlib")
 @Singleton
 public class ProjlibArtifactHandler extends DefaultArtifactHandler {
