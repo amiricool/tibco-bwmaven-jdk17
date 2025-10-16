@@ -119,10 +119,11 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
 
             byte[] libZip = currentEarArchive.files.get("lib.zip");
             if (libZip == null) {
-                throw new IOException("Unable to locate lib.zip inside EAR archive");
+                getLog().warn("lib.zip not found inside EAR archive, creating a new one");
+                currentLibArchive = new ArchiveContents();
+            } else {
+                currentLibArchive = readZipArchive(libZip);
             }
-
-            currentLibArchive = readZipArchive(libZip);
             currentLibArchive.directories.add("WEB-INF/");
             currentLibArchive.directories.add("WEB-INF/lib/");
 
