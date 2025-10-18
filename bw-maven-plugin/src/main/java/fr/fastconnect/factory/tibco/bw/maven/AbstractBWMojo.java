@@ -580,7 +580,7 @@ public class AbstractBWMojo extends AbstractMojo {
 	/**
 	 * The Maven project.
 	 */
-	@Parameter ( property="project", 
+	@Parameter ( property="${project}",
 			     required=true, 
 			     readonly=true)
 	private MavenProject project;
@@ -597,7 +597,7 @@ public class AbstractBWMojo extends AbstractMojo {
 	 * The current Maven session.
 	 *
 	 */
-	@Parameter ( property="session", 
+	@Parameter ( property="${session}",
 		     	required=true, 
 		     	readonly=true)
 	protected MavenSession session;

@@ -129,7 +129,8 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	 * @required
 	 * @readonly
 	 */
-	protected MavenSession session;
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    protected MavenSession session;
 
 	@Override
 	protected MavenSession getSession() {

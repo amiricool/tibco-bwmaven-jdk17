@@ -116,7 +116,8 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 	 * @required
 	 * @readonly
 	 */
-	protected MavenProject project;
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
 
 	@Override
 	protected MavenProject getProject() {
