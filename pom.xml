@@ -58,23 +58,27 @@
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>${maven.enforcer.plugin.version}</version>
                 <executions>
-                    <execution>
-                        <id>enforce-maven</id>
+               <execution>
+                        <id>enforce-maven-env</id>
                         <goals>
                             <goal>enforce</goal>
                         </goals>
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>[3.9.0,)</version>
+                                    <version>[${maven.version},)</version>
                                 </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[${maven.compiler.release},)</version>
+                                </requireJavaVersion>
                             </rules>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-		</plugins>
+
+        </plugins>
 	</build>
 
 	<properties>

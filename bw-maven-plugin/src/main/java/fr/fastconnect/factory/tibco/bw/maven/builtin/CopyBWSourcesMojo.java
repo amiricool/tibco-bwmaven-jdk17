@@ -130,6 +130,10 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
         resource.setFiltering(true);
         resource.addExclude("**/*TestSuite/");
 
+        resource.addExclude("**/*.class");
+        resource.addExclude("**/*.jar");
+        resource.addExclude("**/*.zip");
+
         List<Resource> defaults = new ArrayList<Resource>();
         defaults.add(resource);
         return defaults;

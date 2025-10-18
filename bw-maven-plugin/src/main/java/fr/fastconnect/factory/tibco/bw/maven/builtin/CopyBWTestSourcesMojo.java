@@ -230,6 +230,10 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
         resource.setDirectory("${bw.project.location}");
         resource.setFiltering(true);
 
+        resource.addExclude("**/*.class");
+        resource.addExclude("**/*.jar");
+        resource.addExclude("**/*.zip");
+
         List<Resource> defaults = new ArrayList<Resource>();
         defaults.add(resource);
         return defaults;
