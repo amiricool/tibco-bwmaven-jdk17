@@ -133,14 +133,14 @@ public class MassMavenizerMojo extends ExistingBWProjectsListMojo {
 	 * The project currently being build.
 	 *
 	 */
-	@Parameter(property="${project}", required=true, readonly=true)
+	@Parameter(defaultValue="${project}", required=true, readonly=true)
 	protected MavenProject project;
 
 	/**
 	 * The current Maven session.
 	 *
 	 */
-	@Parameter(property="${session}", required=true, readonly=true)
+	@Parameter(defaultValue="${session}", required=true, readonly=true)
 	protected MavenSession session;
 
 	/**
