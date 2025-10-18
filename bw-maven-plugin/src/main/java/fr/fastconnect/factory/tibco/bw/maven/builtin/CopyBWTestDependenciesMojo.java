@@ -64,10 +64,7 @@ import javax.inject.Inject;
 @Mojo(name = "copy-bw-test-dependencies", aggregator = true, requiresProject = true,
         requiresDependencyResolution = ResolutionScope.TEST)
 public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
-	// Mojo configuration
-	/**
-	 *  @parameter property="groupId"
-	 */
+
     @Parameter(property = "groupId", defaultValue = "org.apache.maven.plugins")
     protected String groupId;
 	
@@ -76,9 +73,6 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 		return groupId;
 	}
 
-	/**
-	 *  @parameter property="artifactId"
-	 */
     @Parameter(property = "artifactId", defaultValue = "maven-dependency-plugin")
     protected String artifactId;
 	
@@ -86,9 +80,7 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 	protected String getArtifactId() {
 		return artifactId;
 	}
-	/**
-	 *  @parameter property="version"
-	 */
+
     @Parameter(property = "version", defaultValue = "${maven.dependency.plugin.version}")
     protected String version;
 	
@@ -97,9 +89,6 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 		return version;
 	}
 
-	/**
-	 *  @parameter property="goal"
-	 */
     @Parameter(property = "goal", defaultValue = "copy-dependencies")
     protected String goal;
 	
@@ -108,14 +97,6 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 		return goal;
 	}
 
-	// Environment configuration
-	/**
-	 * The project currently being build.
-	 *
-	 * @parameter property="project"
-	 * @required
-	 * @readonly
-	 */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
@@ -124,13 +105,6 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 		return project;
 	}
 
-	/**
-	 * The current Maven session.
-	 *
-	 * @parameter property="session"
-	 * @required
-	 * @readonly
-	 */
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
 
@@ -139,9 +113,6 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 		return session;
 	}
 
-	/**
-	 * The Build Plugin Manager (this one is Java5 annotation style).
-	 */
     @Inject
 	protected BuildPluginManager pluginManager;
 	
@@ -150,54 +121,6 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
 		return pluginManager;
 	}
 
-	// Configuration
-    /**
-     * The actual Mojo configuration found in the Plexus 'components.xml' file.
-     * <pre>
- 	 *	&lt;component>
- 	 *		&lt;role>org.apache.maven.plugin.Mojo&lt;/role>
- 	 *		&lt;role-hint>default-copy-bw-dependencies&lt;/role-hint>
-	 *		&lt;implementation>fr.fastconnect.factory.tibco.bw.maven.builtin.CopyBWTestDependenciesMojo&lt;/implementation>
-	 *		&lt;isolated-realm>false&lt;/isolated-realm>
-	 *		&lt;configuration>
-	 *			&lt;groupId>org.apache.maven.plugins&lt;/groupId>
- 	 *			&lt;artifactId>maven-dependency-plugin&lt;/artifactId>
-	 *			&lt;version>2.8&lt;/version>
-	 *			&lt;goal>copy-dependencies&lt;/goal>
- 	 *			&lt;configuration>
- 	 *				&lt;property>
- 	 *					&lt;name>outputDirectory&lt;/name>
- 	 *					&lt;value>${project.build.test.directory}/lib&lt;/value>
- 	 *				&lt;/property>
- 	 *				&lt;property>
- 	 *					&lt;name>includeTypes&lt;/name>
- 	 *					&lt;value>projlib,jar&lt;/value>
- 	 *				&lt;/property>
- 	 *				&lt;property>
- 	 *					&lt;name>includeScope&lt;/name>
- 	 *					&lt;value>test&lt;/value>
- 	 *				&lt;/property>
- 	 *				&lt;property>
- 	 *					&lt;name>overWriteIfNewer&lt;/name>
- 	 *					&lt;value>true&lt;/value>
- 	 *				&lt;/property>
- 	 *				&lt;property>
- 	 *					&lt;name>overWriteReleases&lt;/name>
- 	 *					&lt;value>true&lt;/value>
- 	 *				&lt;/property>
- 	 *			&lt;/configuration>
-	 *		&lt;/configuration>
- 	 *		&lt;requirements>
-     *			&lt;requirement>
-	 *				&lt;role>org.apache.maven.plugin.BuildPluginManager&lt;/role>
-     *				&lt;role-hint />
-     *				&lt;field-name>pluginManager&lt;/field-name>
-     *			&lt;/requirement>
-     *		&lt;/requirements>
-	 *	&lt;/component>
-	 * </pre>
-     * @parameter
-     */
     @Parameter
     protected Properties configuration = defaultConfiguration();
 
@@ -206,11 +129,6 @@ public class CopyBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo<Re
         return mergeWithDefaults(configuration, defaultConfiguration());
 	}
 
-    /**
-    * Optional resources parameter do define includes/excludes filesets
-    * 
-    * @parameter
-    */
     @Parameter
     protected List<Resource> resources;
     

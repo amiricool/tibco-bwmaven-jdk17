@@ -62,10 +62,7 @@ import javax.inject.Inject;
 @Mojo(name = "it-deploy-bw", aggregator = true, requiresProject = true,
         requiresDependencyResolution = ResolutionScope.TEST)
 public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
-	// Mojo configuration
-	/**
-	 *  @parameter property="groupId"
-	 */
+
     @Parameter(property = "groupId", defaultValue = "org.apache.maven.plugins")
     protected String groupId;
 	
@@ -74,9 +71,6 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return groupId;
 	}
 
-	/**
-	 *  @parameter property="artifactId"
-	 */
     @Parameter(property = "artifactId", defaultValue = "maven-invoker-plugin")
     protected String artifactId;
 	
@@ -84,9 +78,7 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 	protected String getArtifactId() {
 		return artifactId;
 	}
-	/**
-	 *  @parameter property="version"
-	 */
+
     @Parameter(property = "version", defaultValue = "${maven.invoker.plugin.version}")
     protected String version;
 	
@@ -95,9 +87,6 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return version;
 	}
 
-	/**
-	 *  @parameter property="goal"
-	 */
     @Parameter(property = "goal", defaultValue = "run")
     protected String goal;
 	
@@ -106,14 +95,6 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return goal;
 	}
 
-	// Environment configuration
-	/**
-	 * The project currently being build.
-	 *
-	 * @parameter property="project"
-	 * @required
-	 * @readonly
-	 */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
@@ -122,13 +103,6 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return project;
 	}
 
-	/**
-	 * The current Maven session.
-	 *
-	 * @parameter property="session"
-	 * @required
-	 * @readonly
-	 */
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
 
@@ -137,9 +111,6 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return session;
 	}
 
-	/**
-	 * The Build Plugin Manager (this one is Java5 annotation style).
-	 */
     @Inject
 	protected BuildPluginManager pluginManager;
 	
@@ -148,79 +119,9 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return pluginManager;
 	}
 
-	/**
-	 * @parameter
-	 */
     @Parameter(property = "bw.it.skip", defaultValue = "${bw.it.skip}")
     protected boolean skipInvocation;
 
-	// Configuration
-    /**
-	 * The actual Mojo configuration found in the Plexus 'components.xml' file.
-	 * 
-	 * <pre>
-	 * &lt;component>
-	 * 	&lt;role>org.apache.maven.plugin.Mojo&lt;/role>
-	 * 	&lt;role-hint>default-it-deploy-bw&lt;/role-hint>
-	 * 	&lt;implementation>fr.fastconnect.factory.tibco.bw.maven.builtin.ITRunTestsMojo
-	 * 	&lt;/implementation>
-	 * 	&lt;isolated-realm>false&lt;/isolated-realm>
-	 * 	&lt;configuration>
-	 * 		&lt;groupId>org.apache.maven.plugins&lt;/groupId>
-	 * 		&lt;artifactId>maven-invoker-plugin&lt;/artifactId>
-	 * 		&lt;version>1.9&lt;/version>
-	 * 		&lt;goal>run&lt;/goal>
-	 * 		&lt;configuration>
-	 * 			&lt;property>
-	 * 				&lt;name>cloneProjectsTo&lt;/name>
-	 * 				&lt;value>${bw.it.projects.run.clone}&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>goals&lt;/name>
-	 * 				&lt;value>${bw.it.projects.run.goals}&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>localRepositoryPath&lt;/name>
-	 * 				&lt;value>${bw.it.local.repository.path}&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>pomIncludes&lt;/name>
-	 * 				&lt;value>${bw.it.projects.run.pomIncludes}&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>profiles&lt;/name>
-	 * 				&lt;value>${bw.it.projects.run.profile}&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>projectsDirectory&lt;/name>
-	 * 				&lt;value>${bw.it.projects.run.directory}&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>properties&lt;/name>
-	 * 				&lt;value>${bw.it.projects.run.properties}&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>streamLogs&lt;/name>
-	 * 				&lt;value>true&lt;/value>
-	 * 			&lt;/property>
-	 * 			&lt;property>
-	 * 				&lt;name>skipInvocation&lt;/name>
-	 * 				&lt;value>${bw.it.skip}&lt;/value>
-	 * 			&lt;/property>
-	 * 		&lt;/configuration>
-	 * 	&lt;/configuration>
-	 * 	&lt;requirements>
-	 * 		&lt;requirement>
-	 * 			&lt;role>org.apache.maven.plugin.BuildPluginManager&lt;/role>
-	 * 			&lt;role-hint />
-	 * 			&lt;field-name>pluginManager&lt;/field-name>
-	 * 		&lt;/requirement>
-	 * 	&lt;/requirements>
-	 * &lt;/component>
-	 * </pre>
-	 * 
-	 * @parameter
-	 */
     @Parameter
     protected Properties configuration = defaultConfiguration();
 
@@ -251,11 +152,6 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
         return merged;
     }
 
-    /**
-    * Optional resources parameter do define includes/excludes filesets
-    * 
-    * @parameter
-    */
     @Parameter
     protected List<Resource> resources;
     

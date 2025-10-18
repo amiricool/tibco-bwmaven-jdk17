@@ -73,10 +73,7 @@ import javax.inject.Inject;
 @Mojo(name = "copy-bw-sources", aggregator = true, requiresProject = true,
         requiresDependencyResolution = ResolutionScope.TEST)
 public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
-	// Mojo configuration
-	/**
-	 *  @parameter property="groupId"
-	 */
+
     @Parameter(property = "groupId", defaultValue = "org.apache.maven.plugins")
     protected String groupId;
 	
@@ -85,9 +82,6 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return groupId;
 	}
 
-	/**
-	 *  @parameter property="artifactId"
-	 */
     @Parameter(property = "artifactId", defaultValue = "maven-resources-plugin")
     protected String artifactId;
 
@@ -96,9 +90,6 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return artifactId;
 	}
 
-	/**
-	 *  @parameter property="version"
-	 */
     @Parameter(property = "version", defaultValue = "${maven.resources.plugin.version}")
     protected String version;
 
@@ -107,9 +98,6 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return version;
 	}
 
-	/**
-	 *  @parameter property="goal"
-	 */
     @Parameter(property = "goal", defaultValue = "copy-resources")
     protected String goal;
 	
@@ -139,10 +127,6 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
         return defaults;
     }
 
-    // Environment configuration
-    /**
-     * The project currently being build.
-     */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
@@ -151,9 +135,6 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return project;
 	}
 
-    /**
-     * The current Maven session.
-     */
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
 
@@ -162,9 +143,6 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return session;
 	}
 
-	/**
-	 * The Build Plugin Manager
-	 */
     @Inject
     protected BuildPluginManager pluginManager;
 	
@@ -173,47 +151,6 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return pluginManager;
 	}
 
-	// Configuration
-    /**
-     * The actual Mojo configuration found in the Plexus 'components.xml' file.
-     * <pre>  		
-     *	&lt;component>
- 	 *		&lt;role>org.apache.maven.plugin.Mojo&lt;/role>
- 	 *		&lt;role-hint>default-copy-bw-sources&lt;/role-hint>
-	 *		&lt;implementation>fr.fastconnect.factory.tibco.bw.maven.builtin.CopyBWSourcesMojo&lt;/implementation>
-	 *		&lt;isolated-realm>false&lt;/isolated-realm>
-	 *		&lt;configuration>
-	 *			&lt;groupId>org.apache.maven.plugins&lt;/groupId>
- 	 *			&lt;artifactId>maven-resources-plugin&lt;/artifactId>
-	 *			&lt;version>2.6&lt;/version>
-	 *			&lt;goal>copy-resources&lt;/goal>
-	 *			&lt;resources>
-	 *					&lt;resource>
-	 *						&lt;directory>${bw.project.location}&lt;/directory>
-	 *						&lt;filtering>true&lt;/filtering>
-	 *						&lt;excludes>
-	 *							&lt;exclude>**&#47;*TestSuite/&lt;/exclude> &lt;!&ndash;&ndash; exclude FCUnit TestSuites  	&ndash;&ndash;&gt:
-	 *						&lt;/excludes>
-	 *					&lt;/resource>
-	 *				&lt;/resources>
-	 *				&lt;configuration>
-	 * 					&lt;property>
-	 * 						&lt;name>outputDirectory&lt;/name>
-	 *  						&lt;value>${project.build.directory}/src&lt;/value>
-	 * 					&lt;/property>
-	 * 				&lt;/configuration>
-	 *		&lt;/configuration>
- 	 *		&lt;requirements>
-     *			&lt;requirement>
-	 *				&lt;role>org.apache.maven.plugin.BuildPluginManager&lt;/role>
-     *				&lt;role-hint />
-     *				&lt;field-name>pluginManager&lt;/field-name>
-     *			&lt;/requirement>
-     *		&lt;/requirements>
-	 *	&lt;/component>
-	 * </pre>
-     * @parameter
-     */
     @Parameter
     protected Properties configuration = defaultConfiguration();
 
@@ -230,35 +167,15 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
         return merged;
     }
 
-	/**
-    * Optional resources parameter do define includes/excludes filesets
-    * 
-    * @parameter
-    */
     @Parameter
     protected List<Resource> resources = defaultResources();
 
-//	@Component(role = PluginDescriptor.class)
-	/**
-	 * The plugin descriptor.
-	 *
-	 * @parameter property="pluginDescriptor"
-	 * @component role="org.apache.maven.plugin.descriptor.PluginDescriptor"
-	 * @required
-	 * @readonly
-	 */
     @Parameter(defaultValue = "${plugin}", readonly = true)
     private PluginDescriptor pluginDescriptor;
 
-	/**
-	 * @parameter property="bw.container.merged.enterprise.archive.name" default-value="${project.artifactId}"
-	 */
     @Parameter(property = "bw.container.merged.enterprise.archive.name", defaultValue = "${project.artifactId}")
     private String enterpriseArchiveName;
 
-	/**
-	 * @parameter property="bw.container.merged.process.archive.name" default-value="${project.artifactId}"
-	 */
     @Parameter(property = "bw.container.merged.process.archive.name", defaultValue = "${project.artifactId}")
     private String processArchiveName;
 
