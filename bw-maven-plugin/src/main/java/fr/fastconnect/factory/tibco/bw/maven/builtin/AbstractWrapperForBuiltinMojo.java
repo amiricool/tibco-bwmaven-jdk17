@@ -127,102 +127,25 @@ import javax.inject.Inject;
  * 
  */
 public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resource> extends AbstractMojo {
-	// Mojo configuration
-	/**
-	 *  @parameter property="groupId"
-	 */
-    @Parameter(property = "groupId")
-    protected String groupId;
+
 	protected abstract String getGroupId();
 
-	/**
-	 *  @parameter property="artifactId"
-	 */
-    @Parameter(property = "artifactId")
-    protected String artifactId;
 	protected abstract String getArtifactId();
 
-	/**
-	 *  @parameter property="version"
-	 */
-    @Parameter(property = "version")
-    protected String version;
 	protected abstract String getVersion();
 
-	/**
-	 *  @parameter property="goal}
-	 */
-    @Parameter(property = "goal")
-    protected String goal;
 	protected abstract String getGoal();
 
-	// Environment configuration
-	/**
-	 * The project currently being build.
-	 *
-	 * @parameter property="project"
-	 * @required
-	 * @readonly
-	 */
-    @Parameter(defaultValue = "${project}", readonly = true, required = true)
-    protected MavenProject project;
 	protected abstract MavenProject getProject();
 
-	/**
-	 * The current Maven session.
-	 *
-	 * @parameter property="session"
-	 * @required
-	 * @readonly
-	 */
-    @Parameter(defaultValue = "${session}", readonly = true, required = true)
-    protected MavenSession session;
 	protected abstract MavenSession getSession();
 
-	/**
-	 * The Build Plugin Manager
-	 */
-    @Inject
-	protected BuildPluginManager pluginManager;
 	protected abstract BuildPluginManager getPluginManager();
 
-	// Configuration
-    /**
-     * The actual Mojo configuration found in the Plexus 'components.xml' file.
-     * <!--
-	 *		<configuration>
-	 *			...
- 	 *		<<	<properties>
- 	 *				<property>
- 	 *					<name><<outputFile>></name>
- 	 *					<value><<${project.build.directory}/resolved>></value>
- 	 *				</property>
- 	 *				<property>
- 	 *					<name><<includeTypes>></name>
- 	 *					<value><<projlib,jar>></value>
- 	 *				</property>
- 	 *			</properties> >>
-	 *		</configuration>
-     * -->
-     * @parameter
-     */
-    @Parameter
-    protected Properties configuration;
     protected abstract Properties getConfiguration();
-	
-    /**
-    * Optional resources parameter do define includes/excludes filesets
-    * 
-    * @parameter
-    */
-    @Parameter
-    protected Properties resources;
+
     protected abstract List<CustomResource> getResources();
 
-	// Execution
-	/**
-	 * @return the Execution Environment for the actual Mojo being called
-	 */
 	protected ExecutionEnvironment getEnvironment() {
 		return executionEnvironment(getProject(), getSession(), getPluginManager());
 	}
@@ -285,8 +208,7 @@ public abstract class AbstractWrapperForBuiltinMojo<CustomResource extends Resou
 	 * @param configuration, the configuration found in Plexus 'components.xml'
 	 * file
 	 * @return the configuration as a List<Element> used by MojoExecutor
-	 * @throws IOException 
-	 */
+     */
 	private List<Element> generateConfiguration(Properties configuration) {
 		ArrayList<Element> configurations = new ArrayList<Element>();
 
