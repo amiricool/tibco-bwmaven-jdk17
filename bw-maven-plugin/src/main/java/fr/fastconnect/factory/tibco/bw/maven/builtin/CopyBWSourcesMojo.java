@@ -90,7 +90,7 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return artifactId;
 	}
 
-    @Parameter(property = "version", defaultValue = "${maven.resources.plugin.version}")
+    @Parameter(property = "version", defaultValue = "${maven.resources.plugin.version}", required = true)
     protected String version;
 
 	@Override

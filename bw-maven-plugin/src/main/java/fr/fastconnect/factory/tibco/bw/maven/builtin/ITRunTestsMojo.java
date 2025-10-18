@@ -79,7 +79,7 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return artifactId;
 	}
 
-    @Parameter(property = "version", defaultValue = "${maven.invoker.plugin.version}")
+    @Parameter(property = "version", defaultValue = "${maven.invoker.plugin.version}", required = true)
     protected String version;
 	
 	@Override

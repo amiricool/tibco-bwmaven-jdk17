@@ -89,7 +89,7 @@ public class ResolveBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo
 		return artifactId;
 	}
 
-    @Parameter(property = "version", defaultValue = "${maven.dependency.plugin.version}")
+    @Parameter(property = "version", defaultValue = "${maven.dependency.plugin.version}", required = true)
     protected String version;
 
 	@Override
@@ -157,7 +157,7 @@ public class ResolveBWTestDependenciesMojo extends AbstractWrapperForBuiltinMojo
         merged.putAll(configuration);
         return merged;
     }
-    
+
     @Parameter
     protected List<Resource> resources;
 

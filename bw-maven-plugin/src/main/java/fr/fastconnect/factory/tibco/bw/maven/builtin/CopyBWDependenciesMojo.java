@@ -81,7 +81,7 @@ public class CopyBWDependenciesMojo extends AbstractWrapperForBuiltinMojo<Resour
 		return artifactId;
 	}
 
-    @Parameter(property = "version", defaultValue = "${maven.dependency.plugin.version}")
+    @Parameter(property = "version", defaultValue = "${maven.dependency.plugin.version}", required = true)
     protected String version;
 	
 	@Override
