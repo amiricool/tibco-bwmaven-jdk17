@@ -82,7 +82,7 @@ public class CopyBWTestSourcesMojo extends AbstractWrapperForBuiltinMojo<Resourc
 		return artifactId;
 	}
 
-    @Parameter(property = "maven.resources.plugin.version", defaultValue = "${maven.resources.plugin.version}", required = true)
+    @Parameter(property = "maven.resources.plugin.version", defaultValue = "3.3.1", required = true)
     protected String version;
 
 	@Override

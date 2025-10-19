@@ -79,7 +79,7 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return artifactId;
 	}
 
-    @Parameter(property = "maven.invoker.plugin.version", defaultValue = "${maven.invoker.plugin.version}", required = true)
+    @Parameter(property = "maven.invoker.plugin.version", defaultValue = "3.9.1", required = true)
     protected String version;
 	
 	@Override
@@ -119,8 +119,6 @@ public class ITRunTestsMojo extends AbstractWrapperForBuiltinMojo<Resource> {
 		return pluginManager;
 	}
 
-    @Parameter(property = "bw.it.skip", defaultValue = "${bw.it.skip}")
-    protected boolean skipInvocation;
 
     @Parameter
     protected Properties configuration = defaultConfiguration();
