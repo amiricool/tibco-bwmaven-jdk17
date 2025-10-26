@@ -608,7 +608,7 @@ public class AbstractBWMojo extends AbstractMojo {
 		this.session = session;
 	}
 
-	@Parameter (defaultValue = "${settings}", readonly = true)
+	@Parameter (defaultValue = "${settings}", readonly = true, required=true)
 	private Settings settings;
 
 	public void setSettings(Settings settings) {

@@ -170,7 +170,7 @@ public class CopyBWSourcesMojo extends AbstractWrapperForBuiltinMojo<Resource> {
     @Parameter
     protected List<Resource> resources = defaultResources();
 
-    @Parameter(defaultValue = "${plugin}", readonly = true)
+    @Parameter(defaultValue = "${plugin}", readonly = true, required = true)
     private PluginDescriptor pluginDescriptor;
 
     @Parameter(property = "bw.container.merged.enterprise.archive.name", defaultValue = "${project.artifactId}")

@@ -116,6 +116,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
 
         try {
             currentEarArchive = readZipArchive(earBytes);
+            boolean isZipLibEmpty = true;
 
             byte[] libZip = currentEarArchive.files.get("lib.zip");
             if (libZip == null) {
@@ -123,6 +124,7 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
                 currentLibArchive = new ArchiveContents();
             } else {
                 currentLibArchive = readZipArchive(libZip);
+                isZipLibEmpty = false;
             }
             currentLibArchive.directories.add("WEB-INF/");
             currentLibArchive.directories.add("WEB-INF/lib/");
@@ -135,14 +137,16 @@ public class IncludeDependenciesInEARMojo extends AbstractBWArtifactMojo {
                 }
                 byte[] jarContent = Files.readAllBytes(source);
                 currentLibArchive.files.put("WEB-INF/lib/" + jarName, jarContent);
+                isZipLibEmpty = false;
             }
 
             if (removeVersionFromFileNames) {
                 removeVersionFromFileNames(ear);
             }
 
-            currentEarArchive.files.put("lib.zip", writeZipArchive(currentLibArchive));
-
+            if (!isZipLibEmpty) {
+                currentEarArchive.files.put("lib.zip", writeZipArchive(currentLibArchive));
+            }
 
 
             Files.write(earPath, writeZipArchive(currentEarArchive));

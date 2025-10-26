@@ -99,7 +99,15 @@ public abstract class AbstractPOMGenerator extends AbstractPackagingMojo {
 	protected abstract String getFailureMessage();
 
 	protected void updatePluginVersion(Model model) {
+        getLog().info("Plugin Descriptor PluginLookupKey: " + pluginDescriptor.getPluginLookupKey());
+        getLog().info("Plugin Descriptor GroupId: " + pluginDescriptor.getGroupId());
+        getLog().info("Plugin Descriptor ArtifactId: " + pluginDescriptor.getArtifactId());
+        getLog().info("Plugin Descriptor Version: " + pluginDescriptor.getVersion());
 		for (Plugin plugin : model.getBuild().getPluginManagement().getPlugins()) {
+            getLog().info("Plugin Model Key: " + plugin.getKey());
+            getLog().info("Plugin Model GroupId: " + plugin.getGroupId());
+            getLog().info("Plugin Model ArtifactId: " + plugin.getArtifactId());
+            getLog().info("Plugin Model Version: " + plugin.getVersion());
 			if (plugin.getKey().equals(pluginDescriptor.getPluginLookupKey())) {
 				plugin.setVersion(pluginDescriptor.getVersion());
 			}
